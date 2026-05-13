@@ -1,79 +1,51 @@
-TYPE: Educational Carousel — Business Owners
 DATE: 2026-05-13
-ACCOUNT: @adamthorai
+TYPE: Educational for Business Owners (Carousel)
 
 ---
 
-SLIDE 1 (Hook)
---------------
-Your team spends hours every week on tasks that shouldn't need a human.
-
-Here are 5 of them.
+SLIDE 1 — HOOK
+"Your team is probably spending 10+ hours a week on tasks AI can do in minutes."
 
 ---
 
 SLIDE 2
--------
-1. Answering the same questions over and over
+Answering the same customer questions. Over. And over.
 
-"What are your prices?" "Do you deliver?" "How long does it take?"
-
-An AI handles this 24/7. Your team handles the actual work.
+FAQs, pricing queries, "what are your hours?" — someone in your business is typing those replies manually every single day. AI handles it instantly, 24/7, without a salary.
 
 ---
 
 SLIDE 3
--------
-2. Chasing leads that went quiet
+Copy-pasting data between apps.
 
-Following up manually is tedious — and easy to forget.
-An AI workflow does it automatically, and it doesn't sound like a robot wrote it.
+CRM → spreadsheet → email. Spreadsheet → invoice → report. This isn't work. It's just moving information around. AI workflows do this automatically the moment new data comes in.
 
 ---
 
 SLIDE 4
--------
-3. Copying data between systems
+Writing reports and updates nobody enjoys writing.
 
-Order comes in on one platform, needs to go into the spreadsheet, then into the CRM...
-
-AI does this automatically. No more copy-paste at the end of the day.
+Weekly summaries, client updates, internal briefings — AI can pull the data and write the first draft in seconds. Your team stops dreading Monday morning.
 
 ---
 
 SLIDE 5
--------
-4. Writing first drafts
+Chasing, following up, reminding people.
 
-Quotes, proposals, follow-up emails — AI writes a solid first draft in seconds.
-Your team tweaks it and sends.
+Payment follow-ups. Unanswered proposals. "Just checking in" emails. AI can monitor these and send the right message at the right time without anyone thinking about it.
 
 ---
 
-SLIDE 6
--------
-5. Weekly reporting
+FINAL SLIDE
+These aren't big, complex tech projects. Most of this can be set up in a week.
 
-Pulling numbers from three different places and putting them into a deck.
-AI does this overnight and drops it in your inbox before you're up.
-
----
-
-SLIDE 7 (Final)
----------------
-None of this needs a massive tech overhaul.
-Most of it can be live within days.
-
-DM me to talk about automating your business.
+DM me if you want to talk about automating the stuff in your business that's quietly eating your team's time.
 
 ---
 
 CAPTION
--------
-Most of the admin your team does every week could be automated — without replacing anyone or ripping out your existing systems. I build AI workflows for businesses that want to move faster with less manual work. DM me to see what's possible.
-
----
+Most businesses are paying people to do jobs AI can do in minutes — not because they don't know AI exists, but because nobody's sat down and actually built it for them. That's what I do. DM me if you want to talk about automating your business.
 
 HASHTAGS
---------
-#AIAutomation #DubaiBusiness #BusinessOwner #WorkflowAutomation #AIForBusiness #DubaiEntrepreneur #AutomateYourBusiness #SmallBusinessOwner
+#AIAutomation #BusinessOwners #WorkflowAutomation #DubaiBusiness #AITools #SaveTime #SmallBusiness #BuildWithAI
+
