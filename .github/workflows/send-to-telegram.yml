@@ -1,0 +1,43 @@
+name: Send post draft to Telegram
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'drafts/**'
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Send draft to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python3 -c "
+          import json, urllib.request, os, glob
+
+          files = sorted(glob.glob('drafts/*.txt'))
+          if not files:
+              print('No draft files found')
+              exit(1)
+
+          latest = files[-1]
+          text = open(latest).read().strip()
+
+          data = json.dumps({
+              'chat_id': os.environ['TELEGRAM_CHAT_ID'],
+              'text': text
+          }, ensure_ascii=False).encode('utf-8')
+
+          req = urllib.request.Request(
+              f'https://api.telegram.org/bot{os.environ[\"TELEGRAM_BOT_TOKEN\"]}/sendMessage',
+              data=data,
+              headers={'Content-Type': 'application/json; charset=utf-8'}
+          )
+          with urllib.request.urlopen(req) as r:
+              print(r.read().decode())
+          "
