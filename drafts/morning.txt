@@ -1,0 +1,5 @@
+Took me ages to realise: every LLM API call resends your entire conversation history. So that 2,000 token system prompt? You're paying for it on every single message.
+
+Prompt caching fixes this. One flag. Embarrassingly simple once you know.
+
+You using it?
