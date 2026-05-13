@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Send draft to Telegram
         env:
@@ -18,15 +20,19 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           python3 -c "
-          import json, urllib.request, os, glob
+          import json, urllib.request, os, subprocess
 
-          files = sorted(glob.glob('drafts/*.txt'))
-          if not files:
-              print('No draft files found')
-              exit(1)
+          result = subprocess.run(
+              ['git', 'diff', 'HEAD~1', '--name-only', '--', 'drafts/*.txt'],
+              capture_output=True, text=True
+          )
+          changed = [f for f in result.stdout.strip().split('\n') if f.startswith('drafts/') and f.endswith('.txt')]
 
-          latest = files[-1]
-          text = open(latest).read().strip()
+          if not changed:
+              print('No draft file changed in this commit')
+              exit(0)
+
+          text = open(changed[0]).read().strip()
 
           data = json.dumps({
               'chat_id': os.environ['TELEGRAM_CHAT_ID'],
