@@ -1,1 +1,5 @@
-Unpopular opinion: the 'learn to code' crowd missed the point. The real skill was always problem-solving, not syntax. AI just made that obvious. Ex-cop, no CS degree, shipping apps in Dubai. Anyone else come from a completely different background?
+The gap between "I want to build AI products" and actually shipping something real is bigger than anyone tells you.
+
+Six months in — ex-cop, no coding background, building in Dubai — and I'm still figuring it out daily.
+
+What did the messy middle of building look like for you?
