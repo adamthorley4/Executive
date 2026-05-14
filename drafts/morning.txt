@@ -1,9 +1,11 @@
-1/ Most people using AI are still just... chatting with it. Nothing wrong with that. But there's a much bigger thing on the other side.
+1/ Hot take: most "building with AI" posts are actually "building a demo nobody will pay for" posts.
 
-2/ Give the model tools — file access, code execution, API calls, web search — and it stops answering questions and starts doing things.
+Including some of mine, let's be honest.
 
-That's the jump from chatbot to agent.
+2/ The AI part is the fun bit. It's also the easy bit.
 
-3/ Once you build your first proper agentic workflow, prompting alone feels like using a calculator when you could've had a spreadsheet.
+Figuring out who pays, why they'd pay, and whether the market's actually there? That's the bit that keeps me up at night.
 
-What was the first thing you built that actually surprised you?
+3/ Three months in and I spend more time on positioning than I do on prompts now.
+
+Where are you at with this — demo phase or actual product?
