@@ -1,51 +1,46 @@
-DATE: 2026-05-13
-TYPE: Educational for Business Owners (Carousel)
+DATE: 2026-05-14
+TYPE: Reel Idea (day % 3 == 2)
 
 ---
 
-SLIDE 1 — HOOK
-"Your team is probably spending 10+ hours a week on tasks AI can do in minutes."
+CONCEPT
+Your business is leaking time on tasks you've accepted as "just how it is" — this reel names one of them and shows what life looks like when AI handles it instead.
 
 ---
 
-SLIDE 2
-Answering the same customer questions. Over. And over.
-
-FAQs, pricing queries, "what are your hours?" — someone in your business is typing those replies manually every single day. AI handles it instantly, 24/7, without a salary.
-
----
-
-SLIDE 3
-Copy-pasting data between apps.
-
-CRM → spreadsheet → email. Spreadsheet → invoice → report. This isn't work. It's just moving information around. AI workflows do this automatically the moment new data comes in.
+HOOK (first 3 seconds)
+To camera, casual:
+"Your business is doing something right now that takes hours. AI does it in 30 seconds."
 
 ---
 
-SLIDE 4
-Writing reports and updates nobody enjoys writing.
+SCRIPT OUTLINE
 
-Weekly summaries, client updates, internal briefings — AI can pull the data and write the first draft in seconds. Your team stops dreading Monday morning.
+[0–3s] Hook — straight to camera, no intro fluff
+"Your business is doing something right now that takes hours. AI does it in 30 seconds."
 
----
+[3–10s] Name the problem — keep it concrete, pick one most viewers will recognise
+"Someone sends you an enquiry — email, DM, contact form, whatever. Then someone reads it, figures out what they want, adds it to a spreadsheet, drafts a reply, sends it. If you're lucky it happens same day."
 
-SLIDE 5
-Chasing, following up, reminding people.
+[10–20s] Show the contrast — cut or quick screen share
+"With an AI workflow: message comes in, AI reads it, categorises it, logs it, and sends a personalised reply — all before you've even opened your inbox. Every time. No one touches it."
 
-Payment follow-ups. Unanswered proposals. "Just checking in" emails. AI can monitor these and send the right message at the right time without anyone thinking about it.
+[20–30s] Land the point — relatable, not preachy
+"Most businesses I talk to have three or four of these. They just don't know it yet because they've been doing it manually for so long it feels normal."
 
----
-
-FINAL SLIDE
-These aren't big, complex tech projects. Most of this can be set up in a week.
-
-DM me if you want to talk about automating the stuff in your business that's quietly eating your team's time.
+[30–40s] Close to camera — relaxed, direct
+"I build these workflows. If you want to stop doing the stuff you shouldn't be doing, DM me — let's have a look at what we can knock out."
 
 ---
 
 CAPTION
-Most businesses are paying people to do jobs AI can do in minutes — not because they don't know AI exists, but because nobody's sat down and actually built it for them. That's what I do. DM me if you want to talk about automating your business.
+You've got tasks in your business that feel unavoidable. Most of them aren't.
+
+AI can handle the inbox triaging, the lead logging, the follow-up emails — the stuff that eats your afternoon without ever moving the needle.
+
+DM me if you want to talk about what that could look like for yours.
+
+---
 
 HASHTAGS
-#AIAutomation #BusinessOwners #WorkflowAutomation #DubaiBusiness #AITools #SaveTime #SmallBusiness #BuildWithAI
-
+#AIAutomation #BusinessAutomation #AIWorkflows #SmallBusinessOwner #DubaiBusiness #WorkSmart #AIForBusiness #Entrepreneur
