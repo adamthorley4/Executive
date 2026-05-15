@@ -1,11 +1,5 @@
-1/ Hot take: most "building with AI" posts are actually "building a demo nobody will pay for" posts.
+Realised this week I've been building features nobody asked for. Classic rookie move. Stripped it back to the actual core thing and honestly felt like a weight off.
 
-Including some of mine, let's be honest.
+Scope creep disguises itself as progress — that's the trap.
 
-2/ The AI part is the fun bit. It's also the easy bit.
-
-Figuring out who pays, why they'd pay, and whether the market's actually there? That's the bit that keeps me up at night.
-
-3/ Three months in and I spend more time on positioning than I do on prompts now.
-
-Where are you at with this — demo phase or actual product?
+Anyone else done this?
