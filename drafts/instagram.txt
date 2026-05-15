@@ -1,46 +1,43 @@
-DATE: 2026-05-14
-TYPE: Reel Idea (day % 3 == 2)
-
----
-
-CONCEPT
-Your business is leaking time on tasks you've accepted as "just how it is" — this reel names one of them and shows what life looks like when AI handles it instead.
+DATE: 2026-05-15
+TYPE: Show Your Work — Reel (day % 3 == 0)
 
 ---
 
 HOOK (first 3 seconds)
-To camera, casual:
-"Your business is doing something right now that takes hours. AI does it in 30 seconds."
+Screen recording already playing — a raw enquiry email hits an inbox, and within seconds a personalised, professional reply lands back in the sender's inbox. Cut to Adam, straight to camera:
+"I didn't write that. I didn't even see it come in."
 
 ---
 
-SCRIPT OUTLINE
+DEMO OUTLINE
 
-[0–3s] Hook — straight to camera, no intro fluff
-"Your business is doing something right now that takes hours. AI does it in 30 seconds."
+[0–3s] Hook — screen recording rolling from the first frame
+Show: an enquiry email landing in an inbox (name/details blurred). Instantly, a reply sends itself. Timer visible — under 10 seconds total.
 
-[3–10s] Name the problem — keep it concrete, pick one most viewers will recognise
-"Someone sends you an enquiry — email, DM, contact form, whatever. Then someone reads it, figures out what they want, adds it to a spreadsheet, drafts a reply, sends it. If you're lucky it happens same day."
+[3–8s] Pull back to reveal the workflow
+Quick screen share of the automation: email received → AI reads and categorises it → personalised reply drafted and sent → lead logged in a spreadsheet → Slack notification fired to the owner.
 
-[10–20s] Show the contrast — cut or quick screen share
-"With an AI workflow: message comes in, AI reads it, categorises it, logs it, and sends a personalised reply — all before you've even opened your inbox. Every time. No one touches it."
+[8–18s] Walk through what the AI actually did
+"It read the enquiry, figured out what service they were asking about, wrote a reply that sounds like me, logged their details, and pinged me on Slack — all while I was asleep."
+Show each step firing in real time if possible, or show the finished log with multiple entries.
 
-[20–30s] Land the point — relatable, not preachy
-"Most businesses I talk to have three or four of these. They just don't know it yet because they've been doing it manually for so long it feels normal."
+[18–28s] Land why it matters
+"Every lead gets a response in seconds, not hours. No one falls through the cracks. And I'm not stuck in my inbox."
+Cut to the Slack notification popping on phone.
 
-[30–40s] Close to camera — relaxed, direct
-"I build these workflows. If you want to stop doing the stuff you shouldn't be doing, DM me — let's have a look at what we can knock out."
+[28–40s] Close — relaxed, to camera
+"This took me about a day to build. If you're running a business and still replying to every enquiry by hand — DM me. I'll build you one of these."
 
 ---
 
 CAPTION
-You've got tasks in your business that feel unavoidable. Most of them aren't.
+Built an AI workflow that handles every new enquiry automatically — reads it, replies to it, logs it, and notifies me on Slack.
 
-AI can handle the inbox triaging, the lead logging, the follow-up emails — the stuff that eats your afternoon without ever moving the needle.
+Takes under 10 seconds. I don't touch it.
 
-DM me if you want to talk about what that could look like for yours.
+If you're still writing those replies yourself, DM me and I'll build this for your business.
 
 ---
 
 HASHTAGS
-#AIAutomation #BusinessAutomation #AIWorkflows #SmallBusinessOwner #DubaiBusiness #WorkSmart #AIForBusiness #Entrepreneur
+#AIAutomation #AIWorkflows #BusinessAutomation #LeadGeneration #DubaiBusiness #BuildingWithAI #WorkflowAutomation #Entrepreneur
