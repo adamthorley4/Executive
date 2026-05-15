@@ -1,5 +1,1 @@
-The gap between "I want to build AI products" and actually shipping something real is bigger than anyone tells you.
-
-Six months in — ex-cop, no coding background, building in Dubai — and I'm still figuring it out daily.
-
-What did the messy middle of building look like for you?
+Spent weeks obsessing over which model to use. Benchmarks, pricing, param tweaking. Turns out the actual skill is just what you put IN the context. Rubbish in, rubbish out — doesn't matter how smart the model is. Anyone else take too long to clock that?
