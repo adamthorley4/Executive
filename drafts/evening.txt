@@ -1,1 +1,10 @@
-Spent weeks obsessing over which model to use. Benchmarks, pricing, param tweaking. Turns out the actual skill is just what you put IN the context. Rubbish in, rubbish out — doesn't matter how smart the model is. Anyone else take too long to clock that?
+POST TYPE: Engagement / Clickbait
+DATE: 2026-05-16 (Evening)
+
+---
+
+1/ Hot take: the most dangerous people in AI right now aren't the engineers.
+
+2/ They're the ones who actually understand a real industry, picked up Claude Code six months ago, and started building. No CS degree. No VC. Just problems they already knew how to solve.
+
+3/ Used to be a copper in Norwich. Now building AI apps in Dubai. If that's possible, the barrier really isn't what you think it is. What's the thing stopping you from starting?
