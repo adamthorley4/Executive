@@ -1,43 +1,45 @@
-DATE: 2026-05-15
-TYPE: Show Your Work — Reel (day % 3 == 0)
+DATE: 2026-05-16
+TYPE: Reel Idea (day 136, 136 % 3 = 2)
+
+---
+
+CONCEPT
+"I automated the thing that was eating my evenings — and it took about an hour to build"
 
 ---
 
 HOOK (first 3 seconds)
-Screen recording already playing — a raw enquiry email hits an inbox, and within seconds a personalised, professional reply lands back in the sender's inbox. Cut to Adam, straight to camera:
-"I didn't write that. I didn't even see it come in."
+Adam holds up his phone to camera and says:
+
+"This used to take me two hours. Now it runs itself while I'm at the gym."
 
 ---
 
-DEMO OUTLINE
+SCRIPT OUTLINE
 
-[0–3s] Hook — screen recording rolling from the first frame
-Show: an enquiry email landing in an inbox (name/details blurred). Instantly, a reply sends itself. Timer visible — under 10 seconds total.
+[Beat 1 — The pain, 0:03–0:12]
+Cut to screen recording or Adam talking to camera.
+"Every week I was spending hours on [task — e.g. pulling reports, chasing leads, writing updates, whatever fits]. Just copy, paste, repeat. The kind of thing that feels important but adds nothing."
 
-[3–8s] Pull back to reveal the workflow
-Quick screen share of the automation: email received → AI reads and categorises it → personalised reply drafted and sent → lead logged in a spreadsheet → Slack notification fired to the owner.
+[Beat 2 — The build, 0:12–0:30]
+Quick screen capture montage — Claude Code open, a workflow running, maybe a Telegram notification pinging.
+"I sat down with Claude Code and just... described what I wanted. Took about an hour. Now it runs on a schedule, sends me a summary, done."
+(Keep it fast. Show don't explain.)
 
-[8–18s] Walk through what the AI actually did
-"It read the enquiry, figured out what service they were asking about, wrote a reply that sounds like me, logged their details, and pinged me on Slack — all while I was asleep."
-Show each step firing in real time if possible, or show the finished log with multiple entries.
+[Beat 3 — The result, 0:30–0:45]
+Back to face cam, relaxed.
+"I'm not a developer. Couple of months ago I didn't know how to build any of this. But if you can describe a problem clearly, you can automate it. That's genuinely it."
 
-[18–28s] Land why it matters
-"Every lead gets a response in seconds, not hours. No one falls through the cracks. And I'm not stuck in my inbox."
-Cut to the Slack notification popping on phone.
-
-[28–40s] Close — relaxed, to camera
-"This took me about a day to build. If you're running a business and still replying to every enquiry by hand — DM me. I'll build you one of these."
+[Beat 4 — CTA, 0:45–0:60]
+Direct to camera, casual.
+"If you've got a process in your business that you're doing manually on repeat — DM me. That's exactly what I do."
 
 ---
 
 CAPTION
-Built an AI workflow that handles every new enquiry automatically — reads it, replies to it, logs it, and notifies me on Slack.
 
-Takes under 10 seconds. I don't touch it.
+I used to do this manually every single week. Built an automation in an hour that handles it now.
 
-If you're still writing those replies yourself, DM me and I'll build this for your business.
+If your business runs on copy-paste and manual updates, there's a good chance we can fix that. DM me and tell me what's eating your time.
 
----
-
-HASHTAGS
-#AIAutomation #AIWorkflows #BusinessAutomation #LeadGeneration #DubaiBusiness #BuildingWithAI #WorkflowAutomation #Entrepreneur
+#AIautomation #WorkflowAutomation #BusinessAutomation #AItools #DubaiBusiness #SmallBusinessOwner #BuildWithAI #ClaudeCode
