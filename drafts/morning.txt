@@ -1,5 +1,9 @@
-Realised this week I've been building features nobody asked for. Classic rookie move. Stripped it back to the actual core thing and honestly felt like a weight off.
+1/ Most people assume bigger context window = smarter AI. Not quite.
 
-Scope creep disguises itself as progress — that's the trap.
+Models don't treat all parts of the context equally. Stuff buried in the middle gets 'lost' — less likely to influence the output than what's at the start or end.
 
-Anyone else done this?
+2/ It's called the 'lost in the middle' problem and it's well-documented.
+
+If you're building anything with long docs or heavy context — worth thinking about where you put the important bits.
+
+What workarounds have you found that actually help?
