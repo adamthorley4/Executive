@@ -1,9 +1,5 @@
-1/ Most people assume bigger context window = smarter AI. Not quite.
+Hot take: 'learn to code' is the wrong goal in 2025.
 
-Models don't treat all parts of the context equally. Stuff buried in the middle gets 'lost' — less likely to influence the output than what's at the start or end.
+Learn to build. Different thing entirely. And AI just collapsed the distance between those two.
 
-2/ It's called the 'lost in the middle' problem and it's well-documented.
-
-If you're building anything with long docs or heavy context — worth thinking about where you put the important bits.
-
-What workarounds have you found that actually help?
+The people who get that distinction are shipping. The people who don't are still on tutorial 4.
