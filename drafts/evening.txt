@@ -1,5 +1,5 @@
-Spent a week building something I thought was clever. Showed it to someone. First question: "yeah but who's gonna pay for it?"
+The model matters less than you'd think.
 
-Painful. But genuinely the most useful thing someone's said to me in months.
+Swapped from GPT-4 to Claude on a project — barely noticed the difference. Rewrote the system prompt — suddenly felt like a completely different tool.
 
-What's the best feedback you've had that stung a bit?
+The prompt is the product. What's yours actually doing?
