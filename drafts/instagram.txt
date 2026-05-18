@@ -1,47 +1,40 @@
-DATE: 2026-05-17
-TYPE: Reel Idea (day 137, 137 % 3 = 2)
+DATE: 2026-05-18
+TYPE: Show Your Work — Reel
+ACCOUNT: @adamthorai
 
 ---
 
-CONCEPT
-How much time is your team spending answering the same customer questions — over and over, every day?
+REEL FORMAT
+
+HOOK (first 3 seconds):
+"This AI checks my inbox every hour and writes my replies for me."
+[Show phone notification popping up, then cut to a screen recording of the workflow running]
+
+DEMO OUTLINE (what to record):
+1. Open the workflow dashboard — show it scanning an inbox
+2. Cut to an incoming enquiry email (blur any real names)
+3. Watch the AI categorise it: "New lead — proposal request"
+4. Show the drafted reply appearing — personalised, professional, ready to send
+5. Show the timestamp: entire process took 12 seconds
+
+PAYOFF:
+Caption card on screen: "That's 2+ hours of email admin back every week."
+Voiceover: "Built this for myself first. Took me a day to put together. Now it just runs."
+
+CTA (spoken + on screen):
+"If you want this running in your business, DM me."
 
 ---
 
-HOOK (first 3 seconds)
-Adam to camera, casual, direct:
-"How much time does your team spend answering the same questions every single day?"
+CAPTION:
 
----
+Built an AI inbox assistant that monitors emails, spots leads, and drafts replies — automatically.
 
-SCRIPT OUTLINE
-
-Beat 1 — Hook (0–5s)
-On camera, Adam asks the hook question. Let it sit for a beat. Slight shrug or head tilt — make it feel like a genuine question, not a pitch.
-
-Beat 2 — The problem (5–20s)
-"Most businesses I talk to have the same 15 or 20 customer questions coming in constantly. What are your hours? How does delivery work? What's the return policy? And every single one gets answered manually. By a person. Every time."
-Cut to: phone notification sounds, inbox filling up — you can screen record a flooded inbox or just mime checking your phone constantly.
-
-Beat 3 — The build (20–35s)
-"I built a workflow that handles this automatically."
-Cut to: quick screen recording — AI reads an incoming message, identifies the question, drafts a response, flags anything unusual for a human to check. Keep it moving, don't dwell.
-
-Beat 4 — The result (35–50s)
-Back on camera.
-"The routine stuff gets handled. Your team only touches the things that actually need a human. We're talking hours back every week — for something I built in about a day."
-
-Beat 5 — CTA (50–60s)
-"If your inbox looks like a battlefield, DM me. I'll tell you if this is something I can build for you."
-
----
-
-CAPTION
-Your team probably spends a chunk of every day answering questions they've answered a hundred times before. There's a better way to handle that — and it doesn't require hiring anyone new.
+No more living in your inbox. It runs in the background while you get on with actual work.
 
 DM me if you want this built for your business.
 
 ---
 
-HASHTAGS
-#AIworkflows #businessautomation #dubaitech #savetime #AItools #smallbusiness #worksmarter #aiconsultant
+HASHTAGS:
+#AIautomation #DubaiBusinesses #AIworkflows #EmailAutomation #SmallBusinessAI #BuildingWithAI #DubaiEntrepreneur #AItools
