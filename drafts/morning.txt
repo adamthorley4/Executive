@@ -1,5 +1,8 @@
-Hot take: 'learn to code' is the wrong goal in 2025.
+1/3
+Spent 15 years making split-second decisions as a cop. Thought building solo would feel similar — just decisions, right?
 
-Learn to build. Different thing entirely. And AI just collapsed the distance between those two.
+2/3
+It doesn't. Different kind of hard. Slower, quieter, more doubt. No sergeant to check with, no briefing room. Just you and the blinking cursor at 11pm.
 
-The people who get that distinction are shipping. The people who don't are still on tutorial 4.
+3/3
+Anyone else find the isolation the toughest part of building? Or is that just me being soft?
