@@ -1,8 +1,13 @@
-1/3
-Spent 15 years making split-second decisions as a cop. Thought building solo would feel similar — just decisions, right?
+1/ Your AI doesn't remember anything.
 
-2/3
-It doesn't. Different kind of hard. Slower, quieter, more doubt. No sergeant to check with, no briefing room. Just you and the blinking cursor at 11pm.
+Every time you hit send, the whole conversation is re-read from scratch. What feels like "memory" is just history being sent with every message.
 
-3/3
-Anyone else find the isolation the toughest part of building? Or is that just me being soft?
+Understanding this changes how you build.
+
+2/ Once it clicks, you stop asking "why did it forget?" and start asking "what am I actually sending in context — and what's it costing me?"
+
+Prompt caching exists precisely because of this. You're paying to re-read the same system prompt thousands of times a day.
+
+3/ Took me an embarrassingly long time to properly sit with this. Now it shapes everything I build — what goes in context, what gets summarised, what gets stripped out.
+
+What's one thing about how LLMs actually work that changed how you build?
