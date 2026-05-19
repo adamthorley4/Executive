@@ -1,40 +1,44 @@
-DATE: 2026-05-18
-TYPE: Show Your Work — Reel
+DATE: 2026-05-19
+TYPE: Reel Idea (day 139, 139 % 3 = 2)
 ACCOUNT: @adamthorai
 
 ---
 
-REEL FORMAT
-
-HOOK (first 3 seconds):
-"This AI checks my inbox every hour and writes my replies for me."
-[Show phone notification popping up, then cut to a screen recording of the workflow running]
-
-DEMO OUTLINE (what to record):
-1. Open the workflow dashboard — show it scanning an inbox
-2. Cut to an incoming enquiry email (blur any real names)
-3. Watch the AI categorise it: "New lead — proposal request"
-4. Show the drafted reply appearing — personalised, professional, ready to send
-5. Show the timestamp: entire process took 12 seconds
-
-PAYOFF:
-Caption card on screen: "That's 2+ hours of email admin back every week."
-Voiceover: "Built this for myself first. Took me a day to put together. Now it just runs."
-
-CTA (spoken + on screen):
-"If you want this running in your business, DM me."
+CONCEPT
+-------
+"I built an AI that replies to my DMs while I'm asleep" — Adam shows how he automated his Instagram (or WhatsApp/email) lead responses using an AI workflow, so no lead goes cold overnight.
 
 ---
 
-CAPTION:
+HOOK (first 3 seconds)
+-----------------------
+Adam holds up his phone to camera: "Someone messaged me at 2am asking about my services. I was asleep. They got a reply in 30 seconds."
 
-Built an AI inbox assistant that monitors emails, spots leads, and drafts replies — automatically.
+---
 
-No more living in your inbox. It runs in the background while you get on with actual work.
+SCRIPT OUTLINE
+--------------
+[0–3s] Hold up phone. Deliver hook line above.
+[3–8s] Show the notification — an incoming DM or WhatsApp at 2am, then the AI reply going out.
+[8–18s] Quick screen walkthrough: "Here's the workflow. Message comes in → AI reads it → generates a human reply → sends it. I'm not touching anything."
+[18–28s] Cut to Adam: "Now obviously it's not pretending to be me 24/7 — it tells them I'll follow up properly — but it captures the lead, keeps them warm, and books a call. No one falls through the cracks."
+[28–35s] Hold up phone again: "That person? Became a client. Because they didn't have to wait till morning."
+[35–40s] CTA to camera: "If you're running a business and losing leads overnight, DM me. I'll build this for you."
+
+---
+
+CAPTION
+-------
+Built an AI reply system so my leads don't go cold while I'm asleep.
+
+Incoming message → AI reads the context → sends a warm, relevant reply → books a call. All automatic.
+
+No one falls through the cracks. No leads wasted.
 
 DM me if you want this built for your business.
 
 ---
 
-HASHTAGS:
-#AIautomation #DubaiBusinesses #AIworkflows #EmailAutomation #SmallBusinessAI #BuildingWithAI #DubaiEntrepreneur #AItools
+HASHTAGS
+--------
+#AIautomation #BusinessAutomation #LeadGeneration #DubaiBusiness #AItools #WorkflowAutomation #SmallBusinessOwner #ClaudeAI
