@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 import {
   IMAP_HOST, IMAP_PORT, IMAP_USER, IMAP_PASS,
   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS,
-  FROM_EMAIL, FROM_NAME, COL, STATUS,
+  FROM_EMAIL, FROM_NAME, BCC_EMAIL, COL, STATUS,
 } from './config.js';
 import { getAllRows, updateRowFields, today, daysSince } from './sheets.js';
 import { buildEmail2, buildEmail3 } from './templates.js';
@@ -68,7 +68,7 @@ async function sendFollowUp(lead, emailNum, transport) {
   const mailOptions = {
     from: `${FROM_NAME} <${FROM_EMAIL}>`,
     to: email,
-    bcc: FROM_EMAIL,
+    bcc: BCC_EMAIL,
     subject,
     text,
   };

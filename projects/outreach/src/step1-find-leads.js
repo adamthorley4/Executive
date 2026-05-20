@@ -5,26 +5,50 @@ import { appendLeads, getExistingEmails } from './sheets.js';
 // Intent-based queries that surface individual coach/consultant websites,
 // not directories or training schools
 const SEARCH_QUERIES = [
+  // Dubai — business & executive
   '"work with me" "business coach" Dubai',
   '"book a discovery call" coach Dubai',
   '"I help" "business coach" Dubai',
-  '"work with me" "life coach" Dubai',
   '"free consultation" "executive coach" Dubai',
   '"book a call" consultant Dubai UAE',
   '"my clients" coach Dubai site:.com',
-  '"work with me" "mindset coach" Dubai',
-  '"book a call" "health coach" Dubai UAE',
-  '"I help" "career coach" Dubai',
+  '"I help entrepreneurs" Dubai',
   '"discovery call" "leadership coach" Dubai',
   '"work with me" consultant UAE site:.com',
-  '"my clients" "sales coach" Dubai UAE',
-  '"book a session" coach Dubai',
-  '"I help" "performance coach" UAE',
-  '"free consultation" "fitness coach" Dubai site:.com',
+  // Dubai — life, mindset & wellness
+  '"work with me" "life coach" Dubai',
+  '"work with me" "mindset coach" Dubai',
   '"work with me" "wellness coach" Dubai',
-  '"I help entrepreneurs" Dubai',
+  '"book a session" coach Dubai',
+  '"my approach" "life coach" Dubai',
+  '"I help women" coach Dubai',
+  '"I help men" coach Dubai',
+  // Dubai — health & fitness
+  '"book a call" "health coach" Dubai UAE',
+  '"free consultation" "fitness coach" Dubai site:.com',
+  '"I help" "nutrition coach" Dubai',
+  '"work with me" "personal trainer" Dubai site:.com',
+  // Dubai — career & performance
+  '"I help" "career coach" Dubai',
+  '"I help" "performance coach" UAE',
+  '"my clients" "sales coach" Dubai UAE',
+  '"book a call" "career consultant" Dubai',
+  // Dubai — relationships & NLP
   '"book a call" "relationship coach" UAE',
   '"discovery call" "NLP coach" Dubai',
+  '"work with me" "dating coach" Dubai',
+  // Abu Dhabi
+  '"work with me" "business coach" "Abu Dhabi"',
+  '"book a call" coach "Abu Dhabi"',
+  '"I help" consultant "Abu Dhabi"',
+  '"free consultation" "life coach" "Abu Dhabi"',
+  '"discovery call" "executive coach" "Abu Dhabi"',
+  // Sharjah & general UAE
+  '"work with me" coach Sharjah UAE',
+  '"book a call" "business coach" UAE site:.com',
+  '"I help" "wellness coach" UAE',
+  '"my clients" consultant UAE site:.com',
+  '"free consultation" coach UAE site:.com',
 ];
 
 const EMAIL_REGEX = /[\w.+\-]+@[\w\-]+\.[a-z]{2,}/gi;
@@ -118,9 +142,14 @@ export async function findLeads() {
   console.log('Step 1: Finding new leads...');
   const existing = await getExistingEmails();
   const found = [];
+  const usedQueries = new Set();
 
-  for (const query of SEARCH_QUERIES) {
+  // Shuffle queries so we don't hit the same ones every day
+  const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
+
+  for (const query of shuffled) {
     if (found.length >= MAX_NEW_LEADS) break;
+    usedQueries.add(query);
     console.log(`  Searching: "${query}"`);
 
     let urls;

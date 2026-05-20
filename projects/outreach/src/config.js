@@ -50,6 +50,7 @@ export const IMAP_PASS = require_env('IMAP_PASS');
 
 export const FROM_EMAIL = 'adam@adamthor.co.uk';
 export const FROM_NAME = 'Adam';
+export const BCC_EMAIL = 'adamthor.outreach@gmail.com';
 export const SHEET_TAB = 'Leads';
 export const MAX_NEW_LEADS = parseInt(process.env.MAX_NEW_LEADS || '15', 10);
 

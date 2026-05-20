@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL, FROM_NAME, COL, STATUS } from './config.js';
+import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL, FROM_NAME, BCC_EMAIL, COL, STATUS } from './config.js';
 import { getLeadsByStatus, updateRowFields, today } from './sheets.js';
 import { buildEmail1 } from './templates.js';
 
@@ -40,7 +40,7 @@ export async function sendEmails() {
       const info = await transport.sendMail({
         from: `${FROM_NAME} <${FROM_EMAIL}>`,
         to: email,
-        bcc: FROM_EMAIL,
+        bcc: BCC_EMAIL,
         subject,
         text,
       });
