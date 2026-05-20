@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL, FROM_NAME, BCC_EMAIL, COL, STATUS } from './config.js';
+import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL, FROM_NAME, BCC_EMAIL, COL, STATUS, SEND_DELAY_MIN_MS, SEND_DELAY_MAX_MS } from './config.js';
 import { getLeadsByStatus, updateRowFields, today } from './sheets.js';
 import { buildEmail1 } from './templates.js';
 
@@ -54,7 +54,9 @@ export async function sendEmails() {
         [COL.STATUS]: STATUS.SENT_E1,
       });
 
-      await sleep(2000);
+      const delay = SEND_DELAY_MIN_MS + Math.random() * (SEND_DELAY_MAX_MS - SEND_DELAY_MIN_MS);
+      console.log(`    Waiting ${Math.round(delay / 1000)}s before next send...`);
+      await sleep(delay);
     } catch (err) {
       console.error(`    Failed to send to ${email}:`, err.message);
     }
