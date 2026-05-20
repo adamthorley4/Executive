@@ -63,13 +63,29 @@ Status flow: `New` → `Enriched` → `Draft Ready` → `Note Sent` → `Connect
 
 ## Writing Rules (connection notes and DMs)
 
-- No em-dashes (— or -) — dead giveaway of AI writing
-- No exclamation marks in connection notes
+**Positioning:**
+- Adam finds the friction inside a coach/consultant's business — the manual, repetitive work eating their time — and fixes it so they can focus on revenue-generating work
+- Never say "I build AI automations" — that's a feature, not a value prop
+- The hint about what Adam does should feel incidental, not like the point of the message
+
+**Connection note rules:**
+- Strictly under 300 characters
+- Reference something specific about their niche, client type, or approach — show you actually read their profile
+- One natural line about what Adam does (finding operational friction, freeing up time)
+- End with a short, genuine question specific to their work that invites a reply
+- Never end with "would love to have you in my network", "wanted to connect", or any template closer — dead giveaways
+- No em-dashes (— or -)
+- No exclamation marks
 - No flattery ("Loved your content", "Amazing work")
-- No pitch in the connection note — purely conversation-starter
-- Reference something specific about their niche, client type, or approach
-- Connection note strictly under 300 characters
-- Follow-up DM under 120 words, ends with a specific question relevant to them
+
+**Follow-up DM rules (sent after connection accepted):**
+- Under 120 words
+- Acknowledge the connection naturally — not "Thanks for connecting!" (too generic)
+- Reference something specific about their work that sparks a genuine question
+- End with one specific question relevant to them — not "do you find AI useful?" or anything generic
+- No pitch in this message
+- No em-dashes (— or -)
+- Short paragraphs, human voice
 
 ## Lead Quality Notes
 
