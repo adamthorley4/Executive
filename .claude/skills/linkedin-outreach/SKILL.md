@@ -1,0 +1,125 @@
+---
+name: linkedin-outreach
+description: Run and manage the automated LinkedIn outreach pipeline targeting coaches and consultants in Dubai
+trigger: /linkedin-outreach [optional: step to run, e.g. step1, step2, step3, or all]
+examples:
+  - /linkedin-outreach
+  - /linkedin-outreach step1
+  - /linkedin-outreach step3
+  - /linkedin-outreach status
+---
+
+# linkedin-outreach
+
+Runs the automated LinkedIn outreach pipeline at `projects/linkedin-outreach/`. Finds coaches and consultants on LinkedIn in Dubai, searches for their personal websites, scrapes for context, generates a personalised 300-char connection note and a follow-up DM via Claude. Adam sends manually from LinkedIn and updates the sheet status.
+
+## Pipeline Overview
+
+| Step | Script | What it does |
+|------|--------|-------------|
+| 1 | `step1-find.js` | Firecrawl search → find LinkedIn profiles of coaches/consultants in Dubai → append to Google Sheet |
+| 2 | `step2-enrich.js` | Search for personal website → scrape homepage + /about → extract summary, services, about text |
+| 3 | `step3-generate.js` | Claude API → 300-char connection note + follow-up DM → sheet status: Draft Ready |
+
+**Adam's manual steps (outside the pipeline):**
+- Opens the LinkedIn sheet, reads connection notes under "Draft Ready"
+- Sends connection request on LinkedIn, updates Status to "Note Sent"
+- When they accept, updates Status to "Connected", sends the follow-up DM
+- Updates Status to "DM Sent" → "Replied" → "Done" as the conversation progresses
+
+## Key Files
+
+- `projects/linkedin-outreach/src/` — all pipeline scripts
+- `projects/linkedin-outreach/src/config.js` — env vars, column indices, status constants
+- `.github/workflows/linkedin-outreach.yml` — Mon-Fri cron at 6am UTC (10am Dubai)
+
+## Google Sheet
+
+Spreadsheet ID: same as email outreach (`GOOGLE_SHEETS_SPREADSHEET_ID`)
+Tab: `LinkedIn`
+
+| Column | Field | Who updates |
+|--------|-------|-------------|
+| A | Name | Auto |
+| B | Headline | Auto |
+| C | LinkedIn URL | Auto |
+| D | Company | Auto |
+| E | Personal Website | Auto |
+| F | Source (search query) | Auto |
+| G | Summary | Auto |
+| H | Services | Auto |
+| I | About | Auto |
+| J | Connection Note (300 chars) | Auto |
+| K | Follow-up DM | Auto |
+| L | Note Sent Date | Adam |
+| M | Connected Date | Adam |
+| N | DM Sent Date | Adam |
+| O | Replied (Y/N) | Adam |
+| P | Reply Date | Adam |
+| Q | Status | Auto + Adam |
+| R | Notes | Adam |
+
+Status flow: `New` → `Enriched` → `Draft Ready` → `Note Sent` → `Connected` → `DM Sent` → `Replied` → `Done`
+
+## Writing Rules (connection notes and DMs)
+
+- No em-dashes (— or -) — dead giveaway of AI writing
+- No exclamation marks in connection notes
+- No flattery ("Loved your content", "Amazing work")
+- No pitch in the connection note — purely conversation-starter
+- Reference something specific about their niche, client type, or approach
+- Connection note strictly under 300 characters
+- Follow-up DM under 120 words, ends with a specific question relevant to them
+
+## Lead Quality Notes
+
+- Targets individual coaches and consultants — not company pages or training schools
+- Skips LinkedIn company/school/job URLs automatically
+- Skips leads with no parseable name (can't personalise without a name)
+- MAX_NEW_LEADS defaults to 10 per run (override with env var)
+
+## How to Use
+
+**Run the full pipeline (all steps):**
+```
+cd projects/linkedin-outreach && npm start
+```
+
+**Run a single step:**
+```
+cd projects/linkedin-outreach && npm run step1   # find profiles
+cd projects/linkedin-outreach && npm run step2   # enrich
+cd projects/linkedin-outreach && npm run step3   # generate messages
+```
+
+**Test with fewer leads:**
+```
+cd projects/linkedin-outreach && MAX_NEW_LEADS=3 npm run step1
+```
+
+**Check status:** Open the Google Sheet → LinkedIn tab → column Q (Status) shows where every lead is.
+
+## GitHub Actions
+
+Runs Mon-Fri at 6am UTC (10am Dubai) via `.github/workflows/linkedin-outreach.yml`. Manual trigger available via GitHub Actions UI.
+
+All env vars are shared with the email outreach pipeline — no new GitHub Secrets needed if email outreach is already configured:
+- `FIRECRAWL_API_KEY`, `ANTHROPIC_API_KEY`
+- `GOOGLE_SHEETS_SPREADSHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`
+
+## First-Time Setup
+
+Before running, create the `LinkedIn` tab in the Google Sheet manually:
+1. Open the spreadsheet at `GOOGLE_SHEETS_SPREADSHEET_ID`
+2. Add a new sheet tab named exactly `LinkedIn`
+3. Add header row: Name | Headline | LinkedIn URL | Company | Personal Website | Source | Summary | Services | About | Connection Note | Follow-up DM | Note Sent | Connected | DM Sent | Replied | Reply Date | Status | Notes
+
+## Common Issues
+
+**Name not found in step 1** — LinkedIn title format varies. If `name` is blank, the lead is skipped (can't personalise without it). This is intentional.
+
+**No personal website found in step 2** — Lead is still enriched using headline only. Connection note will be less specific but still generated.
+
+**Connection note over 300 chars** — Code enforces the limit by hard-truncating with "..." as a fallback. If this happens frequently, the model prompt may need tuning.
+
+**Firecrawl credits** — At 10 leads/run with 1-2 scrapes per enrichment, budget ~15-20 full runs per month on the 500/month free tier.
