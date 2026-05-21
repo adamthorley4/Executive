@@ -1,1 +1,7 @@
-Went from writing arrest reports to writing Python scripts. Same feeling of not knowing what you're doing — different consequences if you get it wrong. Still figuring out which job was harder.
+Took me ages to understand why AI agents are actually useful.
+
+It's not the model. It's the tools.
+
+Give a model the ability to run code, call an API, search the web — it stops talking and starts doing things.
+
+That's the whole trick. What tools would you wire yours up with?
