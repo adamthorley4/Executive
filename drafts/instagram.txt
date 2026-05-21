@@ -1,55 +1,59 @@
-TYPE: Reel Idea
-DATE: 2026-05-20
-
----
-
-CONCEPT
-A day-in-the-life of an AI workflow doing a job a business owner hates — shown in under 60 seconds.
+TYPE: Show Your Work / Demo (Reel)
+DATE: 2026-05-21
 
 ---
 
 HOOK (first 3 seconds)
-Adam to camera, dead-pan:
-"I haven't written a single follow-up email this week. My AI did all of them."
+"Iran just threatened to shut down the Strait of Hormuz. Most traders heard about it an hour later. My app caught it in seconds."
 
 ---
 
-SCRIPT OUTLINE
+DEMO OUTLINE
 
-[0:00–0:03] — Hook line to camera (above)
+[0:00–0:03] — Hook line to camera, or as VO over a chart spiking on oil
 
-[0:03–0:12] — Cut to screen recording
-Show an inbox with a pile of enquiries sitting unanswered.
-VO: "Most businesses lose leads because nobody follows up fast enough."
+[0:03–0:15] — Screen recording of StockSight AI
+Show a signal coming in from a live news/social feed:
+"Iran threatens closure of Strait of Hormuz"
+System instantly classifies it:
+  - Event type: Geopolitical / Supply Disruption
+  - Affected assets: Crude oil (WTI, Brent), energy ETFs, airlines (bearish)
 
-[0:12–0:25] — Show the workflow running
-Quick demo of an AI workflow:
-- New enquiry comes in
-- AI reads it, drafts a personalised reply
-- Sends within minutes, automatically
-VO: "I built a workflow that watches my inbox, reads the enquiry, and sends a proper reply — not a template, an actual relevant response."
+[0:15–0:30] — Show the alert card generating
+Clean, minimal output:
+  - Directional bias: Bullish for oil
+  - Confidence level
+  - One-line explanation: "Potential supply disruption — bullish for oil prices"
+No noise. Just signal.
 
-[0:25–0:40] — Show the result
-Inbox shows replies sent, leads responded to, zero manual effort.
-VO: "Every lead gets a response in minutes. I didn't touch it."
+[0:30–0:45] — Show the time gap
+Timestamp of StockSight alert vs. when it hit mainstream financial news.
+VO: "The gap between the signal and the headline — that's where the edge lives."
 
-[0:40–0:55] — Back to camera
-"This isn't some generic autoresponder. It reads what they wrote and replies like a human would.
-Any business taking enquiries online could have this running by next week."
+[0:45–0:55] — Back to camera
+"Most retail traders only see the price move after it's already happened. I'm building this
+to change that. Real-time signals, mapped to assets, explained in plain English."
 
 [0:55–0:60] — CTA
-"DM me if you want this built for your business."
+"Early access is coming. Link in bio to join the waitlist."
+
+---
+
+PAYOFF
+Retail traders who feel like they're always late to the market can get ahead of it —
+because they're seeing the cause, not just the effect.
 
 ---
 
 CAPTION
-Most businesses lose half their leads just by being slow to reply.
+Markets don't move on headlines. They move on signals — and most people only see
+the signal after the price already moved.
 
-I built a workflow that reads every new enquiry and sends a personalised response — automatically, within minutes. No templates, no copy-paste, no chasing.
+I'm building StockSight AI to catch those signals in real time. Early access coming soon.
 
-DM me if you want this built for your business.
+Link in bio to join the waitlist.
 
 ---
 
 HASHTAGS
-#AIAutomation #SmallBusinessOwner #DubaiBusiness #LeadGeneration #WorkflowAutomation #AITools #BusinessOwner #MakeMoneyWithAI
+#StockSightAI #TradingTools #MarketIntelligence #RetailTrader #AITrading #FinTech #DubaiStartup #SignalBeforeTheMove
