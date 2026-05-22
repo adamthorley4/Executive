@@ -1,5 +1,7 @@
-Still can't fully explain how I went from writing crime reports in Norfolk to shipping AI tools in Dubai.
+1/ Nobody explains context windows properly, so here goes:
 
-The compounding is wild. Every week I can do something I couldn't do the week before.
+Every time you send a message, the AI re-reads your *entire* conversation from scratch. There's no memory — just a window of text it can see at once. That's it.
 
-What's the weirdest career pivot you've made?
+2/ The window has a size limit (tokens ≈ words). When it fills up, old messages drop off the bottom. The AI literally forgets what you said at the start.
+
+Once you get this, you build differently. What other AI basics are weirdly hard to find a straight answer on?
