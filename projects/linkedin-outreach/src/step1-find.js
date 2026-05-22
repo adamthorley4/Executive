@@ -2,6 +2,8 @@ import fetch from 'node-fetch';
 import { FIRECRAWL_API_KEY, COL, STATUS, MAX_NEW_LEADS } from './config.js';
 import { appendLeads, getExistingLinkedInUrls, normaliseUrl } from './sheets.js';
 
+const today = () => new Date().toISOString().slice(0, 10);
+
 // Search queries targeting individual coach/consultant LinkedIn profiles in Dubai/UAE
 const SEARCH_QUERIES = [
   // Business & executive coaches
@@ -121,13 +123,14 @@ export async function findProfiles() {
       if (!name) continue; // Can't personalise without a name — skip
 
       const niche = extractNiche(headline);
-      const row = new Array(18).fill('');
+      const row = new Array(19).fill('');
       row[COL.NAME] = name;
       row[COL.HEADLINE] = headline;
       row[COL.LINKEDIN_URL] = url.split('?')[0].replace(/\/$/, ''); // clean URL, no query params
       row[COL.COMPANY] = company;
       row[COL.SOURCE] = query;
       row[COL.STATUS] = STATUS.NEW;
+      row[COL.DATE_ADDED] = today();
 
       found.push(row);
       existing.add(normUrl);

@@ -78,6 +78,7 @@ export const COL = {
   STATUS: 17,     // R
   NOTES: 18,      // S
   E1_MSG_ID: 19,  // T
+  DATE_ADDED: 20, // U
 };
 
 export const STATUS = {

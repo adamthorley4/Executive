@@ -60,6 +60,7 @@ export const COL = {
   REPLY_DATE: 15,    // P — date of reply (manual)
   STATUS: 16,        // Q
   NOTES: 17,         // R — Adam's manual notes
+  DATE_ADDED: 18,    // S
 };
 
 export const STATUS = {

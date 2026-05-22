@@ -73,6 +73,7 @@ export const COL = {
   STATUS:     13, // N
   NOTES:      14, // O
   E1_MSG_ID:  15, // P
+  DATE_ADDED: 16, // Q
 };
 
 export const WEB_STATUS = {

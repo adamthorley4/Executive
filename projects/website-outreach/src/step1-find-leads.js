@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { COL, STATUS, MAX_NEW_LEADS } from './config.js';
-import { appendLeads, getExistingEmails } from './sheets.js';
+import { appendLeads, getExistingEmails, today } from './sheets.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -69,7 +69,7 @@ export async function findLeads() {
     if (found.length >= MAX_NEW_LEADS) break;
     if (existing.has(lead.email)) continue;
 
-    const row = new Array(16).fill('');
+    const row = new Array(17).fill('');
     row[COL.COMPANY] = lead.name;
     row[COL.WEBSITE] = '';           // confirmed no website
     row[COL.EMAIL] = lead.email;
@@ -78,6 +78,7 @@ export async function findLeads() {
     row[COL.WEB_STATUS] = 'None';    // already known — skip Step 2 for these
     row[COL.WEB_NOTES] = 'No website listed in DLD register';
     row[COL.STATUS] = STATUS.SCORED; // jump straight to Step 3
+    row[COL.DATE_ADDED] = today();
 
     found.push(row);
     existing.add(lead.email);

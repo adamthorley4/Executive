@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { FIRECRAWL_API_KEY, COL, STATUS, MAX_NEW_LEADS } from './config.js';
-import { appendLeads, getExistingEmails } from './sheets.js';
+import { appendLeads, getExistingEmails, today } from './sheets.js';
 
 // Intent-based queries that surface individual coach/consultant websites,
 // not directories or training schools
@@ -194,7 +194,7 @@ export async function findLeads() {
       const name = extractName(markdown);
       const company = extractCompany(url);
 
-      const row = new Array(20).fill('');
+      const row = new Array(21).fill('');
       row[COL.NAME] = name;
       row[COL.COMPANY] = company;
       row[COL.WEBSITE] = url;
@@ -202,6 +202,7 @@ export async function findLeads() {
       row[COL.NICHE] = query;
       row[COL.SOURCE] = query;
       row[COL.STATUS] = STATUS.NEW;
+      row[COL.DATE_ADDED] = today();
 
       found.push(row);
       existing.add(email);
