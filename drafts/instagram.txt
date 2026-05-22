@@ -1,59 +1,52 @@
-TYPE: Show Your Work / Demo (Reel)
-DATE: 2026-05-21
+DATE: 2026-05-22
+TYPE: Educational for Business Owners (Carousel)
 
 ---
 
-HOOK (first 3 seconds)
-"Iran just threatened to shut down the Strait of Hormuz. Most traders heard about it an hour later. My app caught it in seconds."
+SLIDE 1 — HOOK
+"You're wasting 10+ hours a week on tasks AI can do in under a minute."
 
 ---
 
-DEMO OUTLINE
+SLIDE 2
+❌ Answering the same customer questions. Again. And again.
 
-[0:00–0:03] — Hook line to camera, or as VO over a chart spiking on oil
-
-[0:03–0:15] — Screen recording of StockSight AI
-Show a signal coming in from a live news/social feed:
-"Iran threatens closure of Strait of Hormuz"
-System instantly classifies it:
-  - Event type: Geopolitical / Supply Disruption
-  - Affected assets: Crude oil (WTI, Brent), energy ETFs, airlines (bearish)
-
-[0:15–0:30] — Show the alert card generating
-Clean, minimal output:
-  - Directional bias: Bullish for oil
-  - Confidence level
-  - One-line explanation: "Potential supply disruption — bullish for oil prices"
-No noise. Just signal.
-
-[0:30–0:45] — Show the time gap
-Timestamp of StockSight alert vs. when it hit mainstream financial news.
-VO: "The gap between the signal and the headline — that's where the edge lives."
-
-[0:45–0:55] — Back to camera
-"Most retail traders only see the price move after it's already happened. I'm building this
-to change that. Real-time signals, mapped to assets, explained in plain English."
-
-[0:55–0:60] — CTA
-"Early access is coming. Link in bio to join the waitlist."
+An AI can handle your most common enquiries 24/7 — without you lifting a finger.
+No scripts to write. No staff to train. Just answered messages.
 
 ---
 
-PAYOFF
-Retail traders who feel like they're always late to the market can get ahead of it —
-because they're seeing the cause, not just the effect.
+SLIDE 3
+❌ Writing up meeting notes and chasing action points.
+
+Record the meeting. AI transcribes it, pulls out the action points, and sends a summary to whoever needs it.
+Done before you've made a coffee.
 
 ---
 
-CAPTION
-Markets don't move on headlines. They move on signals — and most people only see
-the signal after the price already moved.
+SLIDE 4
+❌ Following up with leads who haven't replied.
 
-I'm building StockSight AI to catch those signals in real time. Early access coming soon.
-
-Link in bio to join the waitlist.
+Most deals die because nobody followed up. AI can monitor your inbox and send personalised follow-ups automatically — at the right time, in your voice.
 
 ---
 
-HASHTAGS
-#StockSightAI #TradingTools #MarketIntelligence #RetailTrader #AITrading #FinTech #DubaiStartup #SignalBeforeTheMove
+SLIDE 5
+❌ Building your weekly report from three different spreadsheets.
+
+Connect your data sources once. AI pulls the numbers, formats the report, and sends it — every week, without you touching it.
+
+---
+
+SLIDE 6 — CTA
+These aren't future ideas. They're things I'm building right now for businesses.
+
+If any of this sounds like your week, DM me and we'll work out what to automate first.
+
+---
+
+CAPTION:
+Most business owners I talk to are drowning in repetitive work they assumed was just "part of the job." It's not — it's just not been automated yet. DM me if you want to talk about getting some of that time back.
+
+HASHTAGS:
+#AIAutomation #SmallBusiness #BusinessOwner #WorkSmarter #AIForBusiness #DubaiBusiness #ProductivityTips #AutomateYourBusiness
