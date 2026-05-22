@@ -73,7 +73,7 @@ async function main() {
 
   // LinkedIn (LinkedIn tab)
   // DATE_ADDED=18
-  const liRows  = await getRows('LinkedIn');
+  const liRows  = await getRows('LinkedIn Leads');
   const liLeads = countByCol(liRows, 18);
 
   const totalEmails = aiE1 + aiE2 + aiE3 + webE1 + webE2 + webE3;

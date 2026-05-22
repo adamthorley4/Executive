@@ -37,7 +37,7 @@ export const SPREADSHEET_ID = require_env('GOOGLE_SHEETS_SPREADSHEET_ID');
 export const SERVICE_ACCOUNT_EMAIL = require_env('GOOGLE_SERVICE_ACCOUNT_EMAIL');
 export const SERVICE_ACCOUNT_PRIVATE_KEY = require_env('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY').replace(/\\n/g, '\n');
 
-export const SHEET_TAB = 'LinkedIn';
+export const SHEET_TAB = 'LinkedIn Leads';
 export const MAX_NEW_LEADS = parseInt(process.env.MAX_NEW_LEADS || '10', 10);
 
 // Column indices (0-based)
