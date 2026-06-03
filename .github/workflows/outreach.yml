@@ -2,7 +2,7 @@ name: Cold Email Outreach Pipeline
 
 on:
   schedule:
-    - cron: '0 5 * * *'  # 5am UTC = 9am Dubai (UTC+4)
+    - cron: '0 8 * * *'  # 8am UTC = 9am UK BST (UTC+1) — adjust to '0 9 * * *' in winter (GMT)
   workflow_dispatch:        # manual trigger for testing
 
 jobs:
