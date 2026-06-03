@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",
+    "cheerio": "^1.2.0",
     "googleapis": "^140.0.0",
     "node-fetch": "^3.3.2"
   }

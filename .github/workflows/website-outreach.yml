@@ -2,7 +2,7 @@ name: Website Outreach Pipeline
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # 6am UTC = 10am Dubai (UTC+4)
+    - cron: '0 8 * * *'  # 8am UTC = 9am UK BST (UTC+1) — adjust to '0 9 * * *' in winter (GMT)
   workflow_dispatch:        # manual trigger for testing
 
 jobs:
@@ -26,7 +26,6 @@ jobs:
 
       - name: Run website outreach pipeline
         env:
-          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}

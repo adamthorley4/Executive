@@ -1,80 +1,87 @@
 import fetch from 'node-fetch';
-import { FIRECRAWL_API_KEY, COL, STATUS, MAX_NEW_LEADS } from './config.js';
+import { load } from 'cheerio';
+import { COL, STATUS, MAX_NEW_LEADS } from './config.js';
 import { appendLeads, getExistingLinkedInUrls, normaliseUrl } from './sheets.js';
 
 const today = () => new Date().toISOString().slice(0, 10);
 
-// Search queries targeting individual coach/consultant LinkedIn profiles in Dubai/UAE
 const SEARCH_QUERIES = [
-  // Business & executive coaches
-  'site:linkedin.com/in "business coach" Dubai',
-  'site:linkedin.com/in "executive coach" Dubai',
-  'site:linkedin.com/in "leadership coach" Dubai',
-  'site:linkedin.com/in "business consultant" Dubai',
-  'site:linkedin.com/in "executive coach" UAE',
-  // Life, mindset & wellness
-  'site:linkedin.com/in "life coach" Dubai',
-  'site:linkedin.com/in "mindset coach" Dubai',
-  'site:linkedin.com/in "wellness coach" Dubai',
-  'site:linkedin.com/in "performance coach" Dubai',
-  // Health & fitness
-  'site:linkedin.com/in "health coach" Dubai',
-  'site:linkedin.com/in "nutrition coach" Dubai UAE',
-  // Career & NLP
-  'site:linkedin.com/in "career coach" Dubai',
-  'site:linkedin.com/in "NLP coach" Dubai UAE',
-  'site:linkedin.com/in "NLP practitioner" Dubai',
-  // Relationships & personal development
-  'site:linkedin.com/in "relationship coach" Dubai UAE',
-  'site:linkedin.com/in "personal development coach" Dubai',
-  // Sales & marketing consultants
-  'site:linkedin.com/in "sales consultant" Dubai',
-  'site:linkedin.com/in "marketing consultant" Dubai UAE',
-  // Abu Dhabi
-  'site:linkedin.com/in "business coach" "Abu Dhabi"',
-  'site:linkedin.com/in "life coach" "Abu Dhabi"',
-  'site:linkedin.com/in "executive coach" "Abu Dhabi"',
+  // UK — business & executive
+  'site:linkedin.com/in "business coach" London',
+  'site:linkedin.com/in "executive coach" UK',
+  'site:linkedin.com/in "leadership coach" UK',
+  'site:linkedin.com/in "business consultant" London',
+  'site:linkedin.com/in "executive coach" Manchester',
+  // UK — life, mindset & wellness
+  'site:linkedin.com/in "life coach" UK',
+  'site:linkedin.com/in "mindset coach" UK',
+  'site:linkedin.com/in "wellness coach" London',
+  'site:linkedin.com/in "performance coach" UK',
+  // UK — health & career
+  'site:linkedin.com/in "health coach" UK',
+  'site:linkedin.com/in "career coach" London',
+  'site:linkedin.com/in "NLP coach" UK',
+  'site:linkedin.com/in "NLP practitioner" UK',
+  'site:linkedin.com/in "personal development coach" UK',
+  'site:linkedin.com/in "sales consultant" London',
+  'site:linkedin.com/in "marketing consultant" UK',
+  // US — business & executive
+  'site:linkedin.com/in "business coach" "New York"',
+  'site:linkedin.com/in "executive coach" USA',
+  'site:linkedin.com/in "leadership coach" USA',
+  'site:linkedin.com/in "business consultant" "Los Angeles"',
+  'site:linkedin.com/in "executive coach" Chicago',
+  // US — life, mindset & wellness
+  'site:linkedin.com/in "life coach" USA',
+  'site:linkedin.com/in "mindset coach" USA',
+  'site:linkedin.com/in "wellness coach" "New York"',
+  'site:linkedin.com/in "performance coach" USA',
+  // US — health & career
+  'site:linkedin.com/in "health coach" USA',
+  'site:linkedin.com/in "career coach" "New York"',
+  'site:linkedin.com/in "NLP coach" USA',
+  'site:linkedin.com/in "personal development coach" USA',
+  'site:linkedin.com/in "sales consultant" "New York"',
+  'site:linkedin.com/in "marketing consultant" USA',
 ];
 
-// Known company/aggregator pages to skip
 const BLOCKED_DOMAINS = /\/company\/|\/school\/|\/jobs\/|\/pulse\/|linkedin\.com\/in\/(search|help|legal|cookies|settings|feed)/i;
 
-async function firecrawlSearch(query) {
-  const res = await fetch('https://api.firecrawl.dev/v1/search', {
-    method: 'POST',
+async function duckSearch(query) {
+  const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+  const res = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${FIRECRAWL_API_KEY}`,
-      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml',
     },
-    body: JSON.stringify({ query, limit: 8 }),
   });
-  if (!res.ok) throw new Error(`Firecrawl search failed: ${res.status}`);
-  const json = await res.json();
-  return json.data || [];
+  if (!res.ok) throw new Error(`DuckDuckGo search failed: ${res.status}`);
+  const html = await res.text();
+  const $ = load(html);
+  const results = [];
+  $('.result__a').each((_, el) => {
+    const href = $(el).attr('href') || '';
+    const title = $(el).text().trim();
+    const match = href.match(/[?&]uddg=([^&]+)/);
+    if (match) {
+      try { results.push({ url: decodeURIComponent(match[1]), title }); } catch { /* skip */ }
+    }
+  });
+  return results.slice(0, 8);
 }
 
-// LinkedIn titles: "Name - Headline - Location | LinkedIn" or "Name | Headline | LinkedIn"
 function cleanText(str) {
-  // Remove invisible Unicode directional marks (e.g. RTL marks from Arabic LinkedIn pages)
   return str.replace(/[‎‏‪-‮⁦-⁩]/g, '').trim();
 }
 
 function parseTitleForProfile(title) {
   if (!title) return { name: '', headline: '', company: '' };
-
-  // Strip trailing " | LinkedIn" or " - LinkedIn"
   const clean = cleanText(title.replace(/\s*[|\-]\s*LinkedIn\s*$/i, ''));
-
-  // Split by " - " or " | "
   const parts = clean.split(/\s+[-|]\s+/).map(p => cleanText(p)).filter(Boolean);
-
   const name = parts[0] || '';
   const headline = parts[1] || '';
-  // parts[2] is often "Location" — skip it, not useful as company
-  // Try to extract company from headline (e.g. "Business Coach at Acme")
   const companyMatch = headline.match(/\bat\s+(.+)/i);
   const company = companyMatch ? companyMatch[1].trim() : '';
-
   return { name, headline, company };
 }
 
@@ -85,7 +92,6 @@ function isValidLinkedInProfile(url) {
   return true;
 }
 
-// Extract niche keyword from headline for display
 function extractNiche(headline) {
   const match = headline.match(/^([\w\s]+coach|[\w\s]+consultant|[\w\s]+advisor|[\w\s]+mentor)/i);
   return match ? match[1].trim() : headline.split(/[|,\-]/)[0].trim();
@@ -104,7 +110,8 @@ export async function findProfiles() {
 
     let results;
     try {
-      results = await firecrawlSearch(query);
+      results = await duckSearch(query);
+      await new Promise(r => setTimeout(r, 2000));
     } catch (err) {
       console.error(`  Search failed for "${query}":`, err.message);
       continue;
@@ -120,13 +127,13 @@ export async function findProfiles() {
       if (existing.has(normUrl)) continue;
 
       const { name, headline, company } = parseTitleForProfile(result.title || '');
-      if (!name) continue; // Can't personalise without a name — skip
+      if (!name) continue;
 
       const niche = extractNiche(headline);
       const row = new Array(19).fill('');
       row[COL.NAME] = name;
       row[COL.HEADLINE] = headline;
-      row[COL.LINKEDIN_URL] = url.split('?')[0].replace(/\/$/, ''); // clean URL, no query params
+      row[COL.LINKEDIN_URL] = url.split('?')[0].replace(/\/$/, '');
       row[COL.COMPANY] = company;
       row[COL.SOURCE] = query;
       row[COL.STATUS] = STATUS.NEW;

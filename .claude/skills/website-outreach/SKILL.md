@@ -74,7 +74,7 @@ Adam
 ```
 Hi there,
 
-Just wanted to make sure this didn't get buried.
+In a market as competitive as Dubai real estate, a missing or poor website costs clients before you even get a chance to speak to them.
 
 Adam
 ```
@@ -90,7 +90,7 @@ Adam
 
 ## GitHub Actions
 
-`.github/workflows/website-outreach.yml` — runs daily at 6am UTC (10am Dubai). Manual trigger available via `workflow_dispatch`.
+`.github/workflows/website-outreach.yml` — runs daily at 8am UTC (9am UK BST). Manual trigger available via `workflow_dispatch`.
 
 ## Running Steps Manually
 

@@ -1,74 +1,86 @@
 import fetch from 'node-fetch';
-import { FIRECRAWL_API_KEY, COL, STATUS } from './config.js';
+import { load } from 'cheerio';
+import { COL, STATUS } from './config.js';
 import { getLeadsByStatus, updateRowFields } from './sheets.js';
 
 const BLOCKED_DOMAINS = /linkedin|instagram|facebook|twitter|reddit|yelp|tripadvisor|yellowpages|clutch|upwork|youtube|bark\.com|directory|coachfederation|icf\.org|psychologytoday|therapist|justdial|sulekha|pages\.com|indiamart|thomasnet|manta\.com|hotfrog|bizify|cylex|yell\.com|yelp\.com/i;
 const BLOCKED_EXTENSIONS = /\.(pdf|docx?|xlsx?|pptx?|zip|png|jpg|jpeg|gif|svg)$/i;
 
-async function firecrawlSearch(query) {
-  const res = await fetch('https://api.firecrawl.dev/v1/search', {
-    method: 'POST',
+async function duckSearch(query) {
+  const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+  const res = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${FIRECRAWL_API_KEY}`,
-      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml',
     },
-    body: JSON.stringify({ query, limit: 5 }),
   });
   if (!res.ok) return [];
-  const json = await res.json();
-  return (json.data || []).map(r => r.url).filter(Boolean);
-}
-
-async function scrape(url) {
-  const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${FIRECRAWL_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ url, formats: ['markdown'], onlyMainContent: true }),
+  const html = await res.text();
+  const $ = load(html);
+  const urls = [];
+  $('.result__a').each((_, el) => {
+    const href = $(el).attr('href') || '';
+    const match = href.match(/[?&]uddg=([^&]+)/);
+    if (match) {
+      try { urls.push(decodeURIComponent(match[1])); } catch { /* skip */ }
+    }
   });
-  if (!res.ok) return null;
-  const json = await res.json();
-  return json.data?.markdown || null;
+  return urls.slice(0, 5);
 }
 
-function cleanMarkdown(text) {
-  return text
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+async function fetchHtml(url) {
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' },
+      timeout: 10000,
+    });
+    if (!res.ok) return null;
+    return await res.text();
+  } catch {
+    return null;
+  }
 }
 
-function findInternalLinks(markdown, baseUrl) {
+function htmlToText(html) {
+  const $ = load(html);
+  $('script, style, nav, footer, header, noscript, iframe, [role="navigation"]').remove();
+  const main = $('main, article, [role="main"], .content, #content').first();
+  const root = main.length ? main : $('body');
+  root.find('h1').each((_, el) => $(el).replaceWith(`\n# ${$(el).text().trim()}\n`));
+  root.find('h2').each((_, el) => $(el).replaceWith(`\n## ${$(el).text().trim()}\n`));
+  root.find('h3, h4').each((_, el) => $(el).replaceWith(`\n### ${$(el).text().trim()}\n`));
+  root.find('p, li').each((_, el) => $(el).after('\n'));
+  return root.text().replace(/\n{3,}/g, '\n\n').replace(/[ \t]+/g, ' ').trim();
+}
+
+function findInternalLinks(html, baseUrl) {
+  const $ = load(html);
   const links = [];
-  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-  let match;
   try {
     const origin = new URL(baseUrl).origin;
-    while ((match = linkRegex.exec(markdown)) !== null) {
-      const href = match[2];
-      if (href.startsWith('/') || href.startsWith(origin)) {
+    $('a[href]').each((_, el) => {
+      const href = $(el).attr('href') || '';
+      const text = $(el).text().toLowerCase().trim();
+      if ((href.startsWith('/') || href.startsWith(origin)) && !href.includes('#')) {
         const full = href.startsWith('/') ? origin + href : href;
-        links.push({ text: match[1].toLowerCase(), url: full });
+        links.push({ text, url: full });
       }
-    }
+    });
   } catch {
-    // invalid URL
+    // Invalid URL
   }
   return links;
 }
 
-function extractSection(markdown, headings) {
-  const lines = markdown.split('\n');
+function extractSection(text, headings) {
+  const lines = text.split('\n');
   let inSection = false;
   const collected = [];
   for (const line of lines) {
     const isHeading = /^#{1,3}\s+(.+)/.exec(line);
     if (isHeading) {
-      const text = isHeading[1].toLowerCase();
-      inSection = headings.some(h => text.includes(h));
+      const heading = isHeading[1].toLowerCase();
+      inSection = headings.some(h => heading.includes(h));
       continue;
     }
     if (inSection && line.trim()) {
@@ -79,8 +91,8 @@ function extractSection(markdown, headings) {
   return collected.join(' ').trim();
 }
 
-function extractAboutSnippet(markdown) {
-  const lines = markdown.split('\n');
+function extractAboutSnippet(text) {
+  const lines = text.split('\n');
   let inAbout = false;
   for (const line of lines) {
     const isHeading = /^#{1,3}\s+(.+)/.exec(line);
@@ -92,20 +104,18 @@ function extractAboutSnippet(markdown) {
       return line.trim().slice(0, 300);
     }
   }
-  // Fallback: find the first substantial paragraph
-  const paras = markdown.split('\n\n').filter(p => p.trim().length > 60 && !p.startsWith('#'));
+  const paras = text.split('\n\n').filter(p => p.trim().length > 60 && !p.startsWith('#'));
   return paras[0]?.trim().slice(0, 300) || '';
 }
 
-// Search for the person's personal website — searches their name + niche
 async function findPersonalWebsite(name, headline) {
-  // Build a search query that targets their personal site, not social profiles
   const nicheWord = headline.split(/\s+/).find(w => /coach|consult|advisor|mentor/i.test(w)) || 'coach';
-  const query = `"${name}" "${nicheWord}" Dubai site:.com`;
+  const query = `"${name}" "${nicheWord}" site:.com`;
 
   let urls;
   try {
-    urls = await firecrawlSearch(query);
+    urls = await duckSearch(query);
+    await new Promise(r => setTimeout(r, 2000));
   } catch {
     return null;
   }
@@ -139,7 +149,6 @@ export async function enrichLeads() {
     console.log(`  Enriching: ${name} (${headline})`);
 
     try {
-      // Find their personal website via search
       const websiteUrl = await findPersonalWebsite(name, headline);
 
       let summary = '';
@@ -154,9 +163,9 @@ export async function enrichLeads() {
             return `${u.protocol}//${u.hostname}`;
           })();
 
-          const homeContent = await scrape(homeUrl);
-          if (homeContent) {
-            const internalLinks = findInternalLinks(homeContent, homeUrl);
+          const homeHtml = await fetchHtml(homeUrl);
+          if (homeHtml) {
+            const internalLinks = findInternalLinks(homeHtml, homeUrl);
             const subPages = internalLinks
               .filter(l => /about|services|work.with|programs|offerings/i.test(l.text))
               .slice(0, 2)
@@ -164,14 +173,14 @@ export async function enrichLeads() {
             const aboutUrl = `${new URL(homeUrl).origin}/about`;
             const targetPages = [...new Set([aboutUrl, ...subPages])];
 
-            let combined = cleanMarkdown(homeContent);
+            let combinedText = htmlToText(homeHtml);
             for (const pageUrl of targetPages) {
-              const content = await scrape(pageUrl);
-              if (content) combined += '\n' + cleanMarkdown(content);
+              const html = await fetchHtml(pageUrl);
+              if (html) combinedText += '\n' + htmlToText(html);
             }
 
-            services = extractSection(combined, ['services', 'work with me', 'programs', 'offerings', 'what i offer']);
-            about = extractAboutSnippet(combined);
+            services = extractSection(combinedText, ['services', 'work with me', 'programs', 'offerings', 'what i offer']);
+            about = extractAboutSnippet(combinedText);
             summary = about.slice(0, 200) || services.slice(0, 200);
           }
         } catch (err) {
@@ -179,7 +188,6 @@ export async function enrichLeads() {
         }
       } else {
         console.log(`    No personal website found — using LinkedIn headline only`);
-        // Use headline as minimal summary so we can still generate a message
         summary = headline;
       }
 

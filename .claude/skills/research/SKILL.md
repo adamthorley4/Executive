@@ -35,7 +35,7 @@ Parse what Adam is asking. Is this:
 - **Marketing/growth research** (channels, strategies, what's working)?
 - **Audience research** (retail trader behavior, pain points, watering holes)?
 - **Technical research** (stack, tools, platforms)?
-- **Regulatory/compliance** (UAE fintech rules, financial promotions)?
+- **Regulatory/compliance** (UK/US fintech rules, financial promotions)?
 - **Industry/trend research** (market signals, macro context)?
 
 ### Step 2 — Run deep, multi-pass research
@@ -58,7 +58,7 @@ For each topic, run at least 3-5 distinct searches. For complex topics, more. Ex
 
 Always filter findings through this lens:
 
-**Who Adam is:** Solo founder, pre-launch, based in Dubai (GMT+4), building StockSight AI
+**Who Adam is:** Solo founder, pre-launch, based in the UK (GMT+1/BST), building StockSight AI
 **What StockSight AI is:** Real-time market intelligence platform that detects market-moving signals and explains their impact before the broader market reacts
 **Target audience:** Retail traders and investors who feel they're always late to market moves
 **Current stage:** No revenue, no users — building website and app, capturing sign-up interest
@@ -69,7 +69,7 @@ When interpreting research, always ask:
 - What does this mean specifically for a pre-launch B2C fintech?
 - What's realistic for a solo founder with limited budget?
 - Does this apply to retail traders in particular?
-- What's the UAE / Dubai angle if relevant?
+- What's the UK angle if relevant?
 - Is there a competitive opportunity here for StockSight AI?
 
 ### Step 4 — Synthesise and present
@@ -110,5 +110,5 @@ List key URLs and sources used
 - Prioritise recent sources (2024-2025) unless historical context is explicitly needed
 - If research surfaces a major risk or opportunity Adam should know about urgently, lead with it
 - Run as many searches as the topic warrants — don't cut short for efficiency
-- For regulatory topics (UAE, financial promotions, investment advice disclaimers), always flag specific risks clearly
+- For regulatory topics (UK/US financial promotions, FCA rules, investment advice disclaimers), always flag specific risks clearly
 - When the topic is ready for Perplexity (paid), note it — some deep research passes will benefit from it in future
