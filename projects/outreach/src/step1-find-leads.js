@@ -1,100 +1,113 @@
 import fetch from 'node-fetch';
-import { FIRECRAWL_API_KEY, COL, STATUS, MAX_NEW_LEADS } from './config.js';
+import { load } from 'cheerio';
+import { COL, STATUS, MAX_NEW_LEADS } from './config.js';
 import { appendLeads, getExistingEmails, today } from './sheets.js';
+import { extractName } from './name-utils.js';
 
-// Intent-based queries that surface individual coach/consultant websites,
-// not directories or training schools
 const SEARCH_QUERIES = [
-  // Dubai — business & executive
-  '"work with me" "business coach" Dubai',
-  '"book a discovery call" coach Dubai',
-  '"I help" "business coach" Dubai',
-  '"free consultation" "executive coach" Dubai',
-  '"book a call" consultant Dubai UAE',
-  '"my clients" coach Dubai site:.com',
-  '"I help entrepreneurs" Dubai',
-  '"discovery call" "leadership coach" Dubai',
-  '"work with me" consultant UAE site:.com',
-  // Dubai — life, mindset & wellness
-  '"work with me" "life coach" Dubai',
-  '"work with me" "mindset coach" Dubai',
-  '"work with me" "wellness coach" Dubai',
-  '"book a session" coach Dubai',
-  '"my approach" "life coach" Dubai',
-  '"I help women" coach Dubai',
-  '"I help men" coach Dubai',
-  // Dubai — health & fitness
-  '"book a call" "health coach" Dubai UAE',
-  '"free consultation" "fitness coach" Dubai site:.com',
-  '"I help" "nutrition coach" Dubai',
-  '"work with me" "personal trainer" Dubai site:.com',
-  // Dubai — career & performance
-  '"I help" "career coach" Dubai',
-  '"I help" "performance coach" UAE',
-  '"my clients" "sales coach" Dubai UAE',
-  '"book a call" "career consultant" Dubai',
-  // Dubai — relationships & NLP
-  '"book a call" "relationship coach" UAE',
-  '"discovery call" "NLP coach" Dubai',
-  '"work with me" "dating coach" Dubai',
-  // Abu Dhabi
-  '"work with me" "business coach" "Abu Dhabi"',
-  '"book a call" coach "Abu Dhabi"',
-  '"I help" consultant "Abu Dhabi"',
-  '"free consultation" "life coach" "Abu Dhabi"',
-  '"discovery call" "executive coach" "Abu Dhabi"',
-  // Sharjah & general UAE
-  '"work with me" coach Sharjah UAE',
-  '"book a call" "business coach" UAE site:.com',
-  '"I help" "wellness coach" UAE',
-  '"my clients" consultant UAE site:.com',
-  '"free consultation" coach UAE site:.com',
+  // UK — business & executive
+  '"work with me" "business coach" UK site:.co.uk',
+  '"book a discovery call" coach London',
+  '"I help" "business coach" UK site:.co.uk',
+  '"free consultation" "executive coach" UK',
+  '"book a call" consultant UK site:.co.uk',
+  '"my clients" coach Manchester site:.co.uk',
+  '"I help entrepreneurs" UK site:.co.uk',
+  '"discovery call" "leadership coach" UK',
+  '"work with me" consultant UK site:.co.uk',
+  // UK — life, mindset & wellness
+  '"work with me" "life coach" UK site:.co.uk',
+  '"work with me" "mindset coach" UK',
+  '"book a session" coach London site:.co.uk',
+  '"I help women" coach UK',
+  '"I help men" coach UK',
+  // UK — health & career
+  '"book a call" "health coach" UK',
+  '"I help" "career coach" UK site:.co.uk',
+  '"I help" "performance coach" UK',
+  '"book a call" "career consultant" London',
+  '"discovery call" "NLP coach" UK',
+  // US — business & executive
+  '"work with me" "business coach" USA site:.com',
+  '"book a discovery call" "business coach" "United States"',
+  '"I help" "business coach" "New York" site:.com',
+  '"free consultation" "executive coach" USA',
+  '"book a call" consultant USA site:.com',
+  '"my clients" coach "Los Angeles" site:.com',
+  '"I help entrepreneurs" USA site:.com',
+  '"discovery call" "leadership coach" USA',
+  '"work with me" consultant "United States" site:.com',
+  // US — life, mindset & wellness
+  '"work with me" "life coach" USA site:.com',
+  '"work with me" "mindset coach" USA',
+  '"book a session" coach "United States"',
+  '"I help women" coach USA',
+  '"I help men" coach USA',
+  // US — health & career
+  '"book a call" "health coach" USA',
+  '"I help" "career coach" USA site:.com',
+  '"I help" "performance coach" USA',
+  '"book a call" "career consultant" "New York"',
+  '"discovery call" "NLP coach" USA',
+  '"work with me" "business coach" Chicago',
+  '"I help" "executive coach" "San Francisco"',
 ];
 
 const EMAIL_REGEX = /[\w.+\-]+@[\w\-]+\.[a-z]{2,}/gi;
 
-// Domains and patterns that indicate directories, schools, or aggregators
-const BLOCKED_DOMAINS = /linkedin|instagram|facebook|twitter|reddit|yelp|tripadvisor|yellowpages|clutch|upwork|trustpilot|google\.com|youtube|bark\.com|thumbtack|directory|coaches\.com|coachfederation|icf\.org|coachtrainingedu|findacoach|psychology today|therapist|counsellor|counselor|noomii|coach\.me/i;
+const BLOCKED_DOMAINS = /linkedin|instagram|facebook|twitter|reddit|yelp|tripadvisor|yellowpages|clutch|upwork|trustpilot|google\.com|youtube|bark\.com|thumbtack|directory|coaches\.com|coachfederation|icf\.org|coachtrainingedu|findacoach|psychologytoday|therapist|counsellor|counselor|noomii|coach\.me/i;
 
-// Generic inbox prefixes that mean it's an org, not a person
 const BLOCKED_PREFIXES = ['enroll', 'info', 'hello', 'contact', 'admin', 'support', 'team', 'noreply', 'no-reply', 'example', 'test', 'enquiries', 'enquiry', 'mail', 'office', 'reception', 'booking', 'bookings', 'sales'];
 
-// File extension false-positives from image paths
 const FILE_EXTENSION_REGEX = /\.(png|jpg|jpeg|gif|svg|webp|ico|pdf|zip|css|js|woff|ttf)$/i;
 
-// Signals that a page belongs to an individual (not a company or school)
 const PERSONAL_SIGNALS = /\b(I help|I work with|my clients|work with me|book a call|discovery call|I\'m a|I am a|I\'ve helped|I have helped|my approach|my coaching|my story|about me)\b/i;
 
-async function firecrawlSearch(query) {
-  const res = await fetch('https://api.firecrawl.dev/v1/search', {
-    method: 'POST',
+async function duckSearch(query) {
+  const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+  const res = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${FIRECRAWL_API_KEY}`,
-      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml',
     },
-    body: JSON.stringify({ query, limit: 8 }),
   });
-  if (!res.ok) throw new Error(`Firecrawl search failed: ${res.status}`);
-  const json = await res.json();
-  return (json.data || []).map(r => r.url).filter(Boolean);
+  if (!res.ok) throw new Error(`DuckDuckGo search failed: ${res.status}`);
+  const html = await res.text();
+  const $ = load(html);
+  const urls = [];
+  $('.result__a').each((_, el) => {
+    const href = $(el).attr('href') || '';
+    const match = href.match(/[?&]uddg=([^&]+)/);
+    if (match) {
+      try { urls.push(decodeURIComponent(match[1])); } catch { /* skip */ }
+    }
+  });
+  return [...new Set(urls)].slice(0, 8);
 }
 
-async function firecrawlScrape(url) {
-  const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${FIRECRAWL_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      url,
-      formats: ['markdown'],
-      onlyMainContent: true,
-    }),
-  });
-  if (!res.ok) return null;
-  const json = await res.json();
-  return json.data?.markdown || null;
+async function fetchHtml(url) {
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' },
+      timeout: 10000,
+    });
+    if (!res.ok) return null;
+    return await res.text();
+  } catch {
+    return null;
+  }
+}
+
+function htmlToText(html) {
+  const $ = load(html);
+  $('script, style, nav, footer, header, noscript, iframe, [role="navigation"]').remove();
+  const main = $('main, article, [role="main"], .content, #content').first();
+  const root = main.length ? main : $('body');
+  root.find('h1').each((_, el) => $(el).replaceWith(`\n# ${$(el).text().trim()}\n`));
+  root.find('h2').each((_, el) => $(el).replaceWith(`\n## ${$(el).text().trim()}\n`));
+  root.find('h3, h4').each((_, el) => $(el).replaceWith(`\n### ${$(el).text().trim()}\n`));
+  root.find('p, li').each((_, el) => $(el).after('\n'));
+  return root.text().replace(/\n{3,}/g, '\n\n').replace(/[ \t]+/g, ' ').trim();
 }
 
 function extractEmails(text) {
@@ -104,20 +117,6 @@ function extractEmails(text) {
     if (BLOCKED_PREFIXES.some(p => e.startsWith(p + '@'))) return false;
     return true;
   });
-}
-
-function extractName(markdown) {
-  // Only extract if the pattern makes it unambiguous this is a person's first name
-  const patterns = [
-    /(?:I'm|I am|Hi,?\s+I'm|Hi,?\s+I am)\s+([A-Z][a-z]{2,})\b/,
-    /My name is\s+([A-Z][a-z]{2,})\b/,
-    /meet\s+([A-Z][a-z]{2,}),/,
-  ];
-  for (const pattern of patterns) {
-    const match = markdown.match(pattern);
-    if (match) return match[1];
-  }
-  return ''; // blank = email sends "Hi there" — safer than guessing
 }
 
 function extractCompany(url) {
@@ -142,19 +141,16 @@ export async function findLeads() {
   console.log('Step 1: Finding new leads...');
   const existing = await getExistingEmails();
   const found = [];
-  const usedQueries = new Set();
-
-  // Shuffle queries so we don't hit the same ones every day
   const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
 
   for (const query of shuffled) {
     if (found.length >= MAX_NEW_LEADS) break;
-    usedQueries.add(query);
     console.log(`  Searching: "${query}"`);
 
     let urls;
     try {
-      urls = await firecrawlSearch(query);
+      urls = await duckSearch(query);
+      await new Promise(r => setTimeout(r, 2000)); // avoid rate limiting
     } catch (err) {
       console.error(`  Search failed for "${query}":`, err.message);
       continue;
@@ -166,17 +162,13 @@ export async function findLeads() {
 
       const pagesToTry = [url, ...tryFallbackUrls(url)];
       let emails = [];
-      let markdown = '';
+      let text = '';
 
       for (const pageUrl of pagesToTry) {
-        try {
-          const content = await firecrawlScrape(pageUrl);
-          if (content) {
-            markdown = markdown + '\n' + content;
-            emails.push(...extractEmails(content));
-          }
-        } catch {
-          // Page scrape failed — move on
+        const html = await fetchHtml(pageUrl);
+        if (html) {
+          text += '\n' + htmlToText(html);
+          emails.push(...extractEmails(html));
         }
         if (emails.length) break;
       }
@@ -184,14 +176,13 @@ export async function findLeads() {
       emails = [...new Set(emails)].filter(e => !existing.has(e));
       if (!emails.length) continue;
 
-      // Require personal signals in the content — skip orgs and schools
-      if (!PERSONAL_SIGNALS.test(markdown)) {
+      if (!PERSONAL_SIGNALS.test(text)) {
         console.log(`  Skipped (no personal signals): ${url}`);
         continue;
       }
 
       const email = emails[0];
-      const name = extractName(markdown);
+      const name = extractName(text);
       const company = extractCompany(url);
 
       const row = new Array(21).fill('');
@@ -214,7 +205,6 @@ export async function findLeads() {
   console.log(`Step 1 done. Found ${found.length} new leads.`);
 }
 
-// Run directly
 if (process.argv[1].endsWith('step1-find-leads.js')) {
   findLeads().catch(console.error);
 }

@@ -14,8 +14,8 @@ Runs separately from the coach email outreach pipeline. Uses the same Google She
 
 | Step | Script | What it does |
 |------|--------|--------------|
-| 1 | `step1-find-leads.js` | Firecrawl search for Dubai real estate agencies, writes URLs to sheet |
-| 2 | `step2-score-websites.js` | Visits each URL, scores website quality, finds email |
+| 1 | `step1-find-leads.js` | Reads the local DLD Broker Offices XLS file, picks companies with no website listed, sets status directly to `Scored` — no Firecrawl needed |
+| 2 | `step2-score-websites.js` | Scrapes website URLs (Firecrawl) to score quality and find emails — only runs on leads with `New` status. Step 1 never creates `New` leads, so this step is effectively unused in the current DLD flow |
 | 3 | `step3-generate.js` | Claude generates a personalised opener referencing their specific website situation |
 | 4 | `step4-send.js` | Sends Email 1 via Brevo SMTP |
 | 5 | `step5-followup.js` | IMAP reply detection, sends E2 (day 4) and E3 (day 8) |
@@ -105,10 +105,21 @@ npm run step5   # reply detection + follow-ups
 npm start       # run all steps
 ```
 
+## Email Configuration
+
+- **From:** `adam@adamthor.co.uk` (ImprovMX alias — not a real mailbox)
+- **BCC:** `adamthor.outreach@gmail.com` (quality monitoring — check here to verify sends are landing)
+- **Sending:** Brevo SMTP (`smtp-relay.brevo.com:587`)
+
+## Common Issues
+
+**Emails not delivering** — the sender domain `adamthor.co.uk` must be authenticated in Brevo (Settings > Senders & IPs > Domains). DNS records are managed via Ionos. Without this, Brevo silently rejects every send even though it returns 250 OK to nodemailer. Always verify by checking Brevo's email logs after a test send.
+
 ## Setup Checklist (one-time)
 
 1. In the existing Google Sheet, create a tab named `Website Leads`
 2. Add header row: `Company | Website | Email | Phone | Source | Web Status | Web Notes | Opener | E1 Date | E2 Date | E3 Date | Reply | Reply Date | Status | Notes | E1 Msg ID`
 3. All required env vars (`GOOGLE_SHEETS_SPREADSHEET_ID`, SMTP, IMAP, etc.) are already in `.env` from the existing outreach pipeline — no new vars needed
-4. Run `npm run step1` locally first to verify searches return real estate results
-5. Run `npm run step2` on a small batch before committing to a full daily run
+4. Verify Brevo domain authentication is active before first send
+5. Run `npm run step1` locally first to verify searches return real estate results
+6. Run `npm run step2` on a small batch before committing to a full daily run

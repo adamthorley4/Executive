@@ -2,11 +2,9 @@
 
 > Update this file at the start of each quarter.
 
-No formal goals set yet. Using current priorities as informal goals for Q2 2026.
+## Q2 2026 Goals
 
-## Q2 2026 Informal Goals
-
-- Get the StockSight AI website live and collecting sign-up interest
-- Build a meaningful social media presence for StockSight AI
-- Make significant progress on app development
-- Begin building an early waitlist / user base
+- Land first freelance clients (website design, app design, AI automation)
+- Generate enough freelance income to cover living costs
+- Make meaningful progress on app development — at least one app in build
+- Continue StockSight AI development and get it closer to launch

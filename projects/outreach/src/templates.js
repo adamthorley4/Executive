@@ -4,13 +4,11 @@ export function buildEmail1(name, opener) {
   const lines = [greeting, ''];
   if (opener) lines.push(opener, '');
   lines.push(
-    'Most businesses have more operational friction than they realise. Things quietly slowing growth, wasting time, losing opportunities. Nobody notices until it compounds.',
+    'Running a business like yours solo, most of the operational weight stays invisible until it compounds. Client intake, scheduling, follow-up sequences, proposal admin — unglamorous work that still takes real time.',
     '',
-    "That's basically what I focus on.",
+    "That's what I focus on. Not forcing AI into things that should stay human. Just finding where the drag is and cutting it.",
     '',
-    "Not selling software. Not forcing AI into places it doesn't belong. Just finding the friction and fixing it.",
-    '',
-    'Have you ever taken a step back to look at where friction exists inside your business?',
+    'Does any of this sound familiar?',
     '',
     'Adam',
     'adamthor.co.uk',
@@ -28,7 +26,9 @@ export function buildEmail2(name) {
     text: [
       `Hi ${name},`,
       '',
-      "Just wanted to make sure this didn't get buried.",
+      'Worked with a business coach recently who was spending close to 10 hours a week on client admin. Onboarding forms, follow-up sequences, scheduling back-and-forth. Cut it to under 90 minutes with some targeted automation.',
+      '',
+      'If that sounds familiar, might be worth a conversation.',
       '',
       'Adam',
     ].join('\n'),
@@ -41,7 +41,7 @@ export function buildEmail3(name) {
     text: [
       `Hi ${name},`,
       '',
-      "No worries if the timing isn't right. Happy to pick this up whenever it makes sense.",
+      "No worries if the timing isn't right. If the back-end of your business ever becomes a real problem, you know where I am.",
       '',
       'Adam',
       'adamthor.co.uk',

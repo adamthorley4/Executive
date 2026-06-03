@@ -36,7 +36,7 @@ Runs the automated LinkedIn outreach pipeline at `projects/linkedin-outreach/`. 
 ## Google Sheet
 
 Spreadsheet ID: same as email outreach (`GOOGLE_SHEETS_SPREADSHEET_ID`)
-Tab: `LinkedIn`
+Tab: `LinkedIn Leads`
 
 | Column | Field | Who updates |
 |--------|-------|-------------|
@@ -127,7 +127,7 @@ All env vars are shared with the email outreach pipeline — no new GitHub Secre
 
 Before running, create the `LinkedIn` tab in the Google Sheet manually:
 1. Open the spreadsheet at `GOOGLE_SHEETS_SPREADSHEET_ID`
-2. Add a new sheet tab named exactly `LinkedIn`
+2. Add a new sheet tab named exactly `LinkedIn Leads`
 3. Add header row: Name | Headline | LinkedIn URL | Company | Personal Website | Source | Summary | Services | About | Connection Note | Follow-up DM | Note Sent | Connected | DM Sent | Replied | Reply Date | Status | Notes
 
 ## Common Issues
