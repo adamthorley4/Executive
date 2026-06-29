@@ -27,7 +27,7 @@ function colLetter(colIndex) {
 export async function getAllRows() {
   const res = await sheets().spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: `${SHEET_TAB}!A:T`,
+    range: `${SHEET_TAB}!A:V`,
   });
   const rows = res.data.values || [];
   return rows.slice(1).map((row, i) => ({
@@ -63,7 +63,7 @@ export async function appendLeads(leads) {
   }
   await sheets().spreadsheets.values.append({
     spreadsheetId: SPREADSHEET_ID,
-    range: `${SHEET_TAB}!A:T`,
+    range: `${SHEET_TAB}!A:V`,
     valueInputOption: 'RAW',
     requestBody: { values: toAdd },
   });

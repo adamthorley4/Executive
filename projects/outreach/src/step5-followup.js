@@ -7,6 +7,7 @@ import {
 } from './config.js';
 import { getAllRows, updateRowFields, today, daysSince } from './sheets.js';
 import { buildEmail2, buildEmail3 } from './templates.js';
+import { isSafeName } from './name-utils.js';
 
 function createTransport() {
   return nodemailer.createTransport({
@@ -60,10 +61,12 @@ async function getReplyAddresses() {
 
 async function sendFollowUp(lead, emailNum, transport) {
   const email = lead.data[COL.EMAIL];
-  const name = lead.data[COL.NAME] || 'there';
+  const rawName = lead.data[COL.NAME] || '';
+  const name = isSafeName(rawName) ? rawName : 'there';
   const msgId = lead.data[COL.E1_MSG_ID] || '';
+  const vertical = lead.data[COL.VERTICAL] || '';
 
-  const { subject, text } = emailNum === 2 ? buildEmail2(name) : buildEmail3(name);
+  const { subject, text } = emailNum === 2 ? buildEmail2(name, vertical) : buildEmail3(name, vertical);
 
   const mailOptions = {
     from: `${FROM_NAME} <${FROM_EMAIL}>`,

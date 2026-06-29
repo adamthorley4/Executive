@@ -50,7 +50,7 @@ export const IMAP_PASS = require_env('IMAP_PASS');
 export const FROM_EMAIL = 'adam@adamthor.co.uk';
 export const FROM_NAME = 'Adam';
 export const BCC_EMAIL = 'adamthor.outreach@gmail.com';
-export const SHEET_TAB = 'AI Leads';
+export const SHEET_TAB = 'Leads';
 export const MAX_NEW_LEADS = parseInt(process.env.MAX_NEW_LEADS || '35', 10);
 export const SEND_DELAY_MIN_MS = 120_000;  // 2 min
 export const SEND_DELAY_MAX_MS = 240_000;  // 4 min
@@ -78,6 +78,7 @@ export const COL = {
   NOTES: 18,      // S
   E1_MSG_ID: 19,  // T
   DATE_ADDED: 20, // U
+  VERTICAL: 21,   // V
 };
 
 export const STATUS = {

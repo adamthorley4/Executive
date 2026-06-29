@@ -1,9 +1,8 @@
 name: LinkedIn Outreach Pipeline
 
+# Pipeline archived — LinkedIn outreach removed June 2026
 on:
-  schedule:
-    - cron: '0 8 * * 1-5'  # 8am UTC Mon-Fri = 9am UK BST (UTC+1) — adjust to '0 9 * * 1-5' in winter (GMT)
-  workflow_dispatch:         # manual trigger for testing
+  workflow_dispatch:         # manual trigger only (schedule disabled)
 
 jobs:
   outreach:

@@ -29,32 +29,33 @@ function buildPrompt(lead, extraAbout = '') {
   const company = lead[COL.COMPANY] || '';
   const summary = lead[COL.SUMMARY] || '';
   const services = lead[COL.SERVICES] || '';
-  const painPoints = lead[COL.PAIN_POINTS] || '';
   const about = [lead[COL.ABOUT] || '', extraAbout].filter(Boolean).join('\n');
-  const blog = lead[COL.BLOG] || '';
+  const platform = lead[COL.NOTES] || '';
+  const vertical = lead[COL.VERTICAL] || '';
 
-  return `You are writing the opening line of a cold email from Adam Thorley, who builds AI automations for coaches and consultants.
+  return `You are writing the opening line of a cold email from Adam Thorley, who builds high-end websites for businesses.
 
 Lead: ${name}${company ? ` (${company})` : ''}
-What they do: ${summary}
-Services: ${services}
-Pain points from their website: ${painPoints}
+Industry: ${vertical}
+What they do / sell: ${summary}
+Services / products: ${services}
 About them: ${about}
-Blog themes: ${blog}
+Current website platform: ${platform}
 
-Write ONE opening sentence (max 30 words) that makes a specific observation about their work in a way that naturally implies they carry significant operational weight running a business like theirs.
+Write ONE opening sentence (max 30 words) that makes a specific, genuine observation about this company — their positioning, their market, or how they present what they do.
 
 Rules:
-- Reference something real and specific — their niche, their client type, a specific outcome they promise, or a problem they solve
-- The observation should hint at complexity, volume, or solo responsibility without spelling it out — the email body will make the friction angle explicit
-- NOT generic praise ("I loved your work", "Great content", "I came across your website", "Your website caught my eye")
-- Do not mention AI, automations, or what Adam does
-- End with a full stop — it stands as its own sentence before the email body
+- Observe their positioning, tone, or market context — not specific facts that could be wrong (no exact numbers, fleet sizes, prices, product counts, or named items unless you are certain they appear clearly in the data provided)
+- The observation should feel like it came from someone who actually looked, not a generic comment about their industry
+- Do NOT compliment them ("great products", "love your work", "impressive range")
+- Do NOT pitch anything — no mention of websites, design, or what Adam does
+- Do NOT open with "I noticed" or "I came across"
+- End with a full stop — it is a standalone sentence before the email body
 - Never use dashes or em-dashes (— or -) — they are a giveaway of AI writing
-- Only write SKIP if you have absolutely nothing specific to work with — even a niche or client type counts
+- Only write SKIP if you have absolutely nothing specific to work with
 
-Good example: "Helping ambitious founders scale from six to seven figures while managing your own pipeline and delivery is a lot to carry."
-Bad example: "I noticed you work with ambitious founders looking to scale their businesses."
+Good example: "Selling hand-forged knives at that price point to a market trained on mass-produced steel is a genuine positioning challenge."
+Bad example: "You have 12 vessels in your fleet and three charter routes across the Mediterranean." (risky — verify before stating specifics)
 
 Output ONLY the opening line or SKIP. Nothing else.`;
 }

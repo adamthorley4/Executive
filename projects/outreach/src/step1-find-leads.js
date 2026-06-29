@@ -4,64 +4,81 @@ import { COL, STATUS, MAX_NEW_LEADS } from './config.js';
 import { appendLeads, getExistingEmails, today } from './sheets.js';
 import { extractName } from './name-utils.js';
 
+// Each entry: { query, vertical }
 const SEARCH_QUERIES = [
-  // UK — business & executive
-  '"work with me" "business coach" UK site:.co.uk',
-  '"book a discovery call" coach London',
-  '"I help" "business coach" UK site:.co.uk',
-  '"free consultation" "executive coach" UK',
-  '"book a call" consultant UK site:.co.uk',
-  '"my clients" coach Manchester site:.co.uk',
-  '"I help entrepreneurs" UK site:.co.uk',
-  '"discovery call" "leadership coach" UK',
-  '"work with me" consultant UK site:.co.uk',
-  // UK — life, mindset & wellness
-  '"work with me" "life coach" UK site:.co.uk',
-  '"work with me" "mindset coach" UK',
-  '"book a session" coach London site:.co.uk',
-  '"I help women" coach UK',
-  '"I help men" coach UK',
-  // UK — health & career
-  '"book a call" "health coach" UK',
-  '"I help" "career coach" UK site:.co.uk',
-  '"I help" "performance coach" UK',
-  '"book a call" "career consultant" London',
-  '"discovery call" "NLP coach" UK',
-  // US — business & executive
-  '"work with me" "business coach" USA site:.com',
-  '"book a discovery call" "business coach" "United States"',
-  '"I help" "business coach" "New York" site:.com',
-  '"free consultation" "executive coach" USA',
-  '"book a call" consultant USA site:.com',
-  '"my clients" coach "Los Angeles" site:.com',
-  '"I help entrepreneurs" USA site:.com',
-  '"discovery call" "leadership coach" USA',
-  '"work with me" consultant "United States" site:.com',
-  // US — life, mindset & wellness
-  '"work with me" "life coach" USA site:.com',
-  '"work with me" "mindset coach" USA',
-  '"book a session" coach "United States"',
-  '"I help women" coach USA',
-  '"I help men" coach USA',
-  // US — health & career
-  '"book a call" "health coach" USA',
-  '"I help" "career coach" USA site:.com',
-  '"I help" "performance coach" USA',
-  '"book a call" "career consultant" "New York"',
-  '"discovery call" "NLP coach" USA',
-  '"work with me" "business coach" Chicago',
-  '"I help" "executive coach" "San Francisco"',
+  // --- MAHARI: Luxury Real Estate ---
+  { query: '"luxury property" agency site:.co.uk',                              vertical: 'MAHARI' },
+  { query: '"luxury homes" "contact us" site:.co.uk',                           vertical: 'MAHARI' },
+  { query: '"prime real estate" London agency site:.co.uk',                     vertical: 'MAHARI' },
+  { query: '"luxury properties" agency Dubai site:.com',                        vertical: 'MAHARI' },
+  { query: '"ultra luxury" real estate agency site:.com',                       vertical: 'MAHARI' },
+  { query: '"luxury residential" developer site:.co.uk',                        vertical: 'MAHARI' },
+  { query: '"off-plan" "luxury" property developer UK site:.co.uk',             vertical: 'MAHARI' },
+  { query: '"high-end property" developer London site:.co.uk',                  vertical: 'MAHARI' },
+  { query: '"luxury interior design" studio London site:.co.uk',                vertical: 'MAHARI' },
+  { query: '"architecture studio" luxury residential site:.co.uk',              vertical: 'MAHARI' },
+  { query: '"boutique property" agency UK "contact" site:.co.uk',               vertical: 'MAHARI' },
+  { query: '"luxury apartments" developer "enquire" site:.co.uk',               vertical: 'MAHARI' },
+  { query: '"prime property" agency London Marbella Monaco site:.com',          vertical: 'MAHARI' },
+  { query: '"luxury villas" agency Marbella Spain site:.com',                   vertical: 'MAHARI' },
+
+  // --- PELAGOS: Superyacht / Luxury Marine ---
+  { query: '"yacht charter" company fleet site:.co.uk',                         vertical: 'PELAGOS' },
+  { query: '"superyacht charter" Mediterranean "enquire" site:.com',            vertical: 'PELAGOS' },
+  { query: '"luxury yacht charter" company site:.com',                          vertical: 'PELAGOS' },
+  { query: '"yacht broker" sales site:.co.uk',                                  vertical: 'PELAGOS' },
+  { query: '"superyacht broker" site:.com "contact"',                           vertical: 'PELAGOS' },
+  { query: '"superyacht management" company site:.com',                         vertical: 'PELAGOS' },
+  { query: '"yacht charter" fleet "book now" site:.com',                        vertical: 'PELAGOS' },
+  { query: '"motor yacht" charter company site:.co.uk',                         vertical: 'PELAGOS' },
+  { query: '"sailing yacht" charter company Mediterranean site:.com',           vertical: 'PELAGOS' },
+  { query: '"luxury yacht" itinerary charter "enquiry" site:.com',              vertical: 'PELAGOS' },
+  { query: '"marina" prestige berths "contact" Monaco Palma site:.com',         vertical: 'PELAGOS' },
+  { query: '"private yacht charter" concierge site:.com',                       vertical: 'PELAGOS' },
+
+  // --- KOAN: Premium Artisan / Product Brands ---
+  { query: '"artisan" knives handmade brand site:.co.uk',                       vertical: 'KOAN' },
+  { query: '"handmade knives" UK brand "shop" site:.co.uk',                     vertical: 'KOAN' },
+  { query: '"Japanese knives" UK brand site:.co.uk',                            vertical: 'KOAN' },
+  { query: '"premium kitchen knives" brand site:.com',                          vertical: 'KOAN' },
+  { query: '"artisan kitchenware" brand UK site:.co.uk',                        vertical: 'KOAN' },
+  { query: '"luxury olive oil" brand UK site:.co.uk',                           vertical: 'KOAN' },
+  { query: '"artisan" "hand-crafted" food brand UK "shop" site:.co.uk',         vertical: 'KOAN' },
+  { query: '"small batch" spirits brand UK site:.co.uk',                        vertical: 'KOAN' },
+  { query: '"craft spirits" brand "buy" site:.co.uk',                           vertical: 'KOAN' },
+  { query: '"premium ceramics" brand UK site:.co.uk',                           vertical: 'KOAN' },
+  { query: '"artisan leather goods" brand UK site:.co.uk',                      vertical: 'KOAN' },
+  { query: '"Japanese" import brand UK artisan site:.co.uk',                    vertical: 'KOAN' },
+  { query: '"premium" "handmade" "shop" watchmaker brand UK site:.co.uk',       vertical: 'KOAN' },
+
+  // --- PATROL_PAWS: Local Service Businesses ---
+  { query: '"dog walker" site:.co.uk "book now"',                               vertical: 'PATROL_PAWS' },
+  { query: '"dog walking service" UK "contact me" site:.co.uk',                 vertical: 'PATROL_PAWS' },
+  { query: '"dog walking" "pet sitting" site:.co.uk',                           vertical: 'PATROL_PAWS' },
+  { query: '"mobile dog groomer" site:.co.uk',                                  vertical: 'PATROL_PAWS' },
+  { query: '"pet grooming" service site:.co.uk "book"',                         vertical: 'PATROL_PAWS' },
+  { query: '"doggy daycare" site:.co.uk',                                       vertical: 'PATROL_PAWS' },
+  { query: '"local personal trainer" site:.co.uk "contact"',                    vertical: 'PATROL_PAWS' },
+  { query: '"mobile beautician" UK site:.co.uk',                                vertical: 'PATROL_PAWS' },
+  { query: '"gardener" sole trader site:.co.uk "contact"',                      vertical: 'PATROL_PAWS' },
+  { query: '"electrician" sole trader site:.co.uk "free quote"',                vertical: 'PATROL_PAWS' },
+  { query: '"plumber" site:.co.uk "call me" OR "book now"',                     vertical: 'PATROL_PAWS' },
+  { query: '"osteopath" site:.co.uk "book online"',                             vertical: 'PATROL_PAWS' },
+  { query: '"physiotherapist" site:.co.uk "book appointment"',                  vertical: 'PATROL_PAWS' },
+  { query: '"massage therapist" site:.co.uk "book"',                            vertical: 'PATROL_PAWS' },
 ];
 
 const EMAIL_REGEX = /[\w.+\-]+@[\w\-]+\.[a-z]{2,}/gi;
 
-const BLOCKED_DOMAINS = /linkedin|instagram|facebook|twitter|reddit|yelp|tripadvisor|yellowpages|clutch|upwork|trustpilot|google\.com|youtube|bark\.com|thumbtack|directory|coaches\.com|coachfederation|icf\.org|coachtrainingedu|findacoach|psychologytoday|therapist|counsellor|counselor|noomii|coach\.me/i;
+const BLOCKED_DOMAINS = /linkedin|instagram|facebook|twitter|reddit|yelp|tripadvisor|yellowpages|clutch|upwork|trustpilot|google\.com|youtube|bark\.com|thumbtack|directory|rightmove|zoopla|onthemarket|primelocation|booking\.com|airbnb|viator|getaway|tripadvisor/i;
 
-const BLOCKED_PREFIXES = ['enroll', 'info', 'hello', 'contact', 'admin', 'support', 'team', 'noreply', 'no-reply', 'example', 'test', 'enquiries', 'enquiry', 'mail', 'office', 'reception', 'booking', 'bookings', 'sales'];
+// Luxury verticals: allow info@, hello@, contact@ — a real person manages these inboxes
+const LUXURY_VERTICALS = new Set(['MAHARI', 'PELAGOS', 'KOAN']);
+
+const BLOCKED_PREFIXES_STRICT = ['enroll', 'info', 'hello', 'contact', 'admin', 'support', 'team', 'noreply', 'no-reply', 'example', 'test', 'enquiries', 'enquiry', 'mail', 'office', 'reception', 'booking', 'bookings', 'sales'];
+const BLOCKED_PREFIXES_LUXURY = ['enroll', 'admin', 'support', 'noreply', 'no-reply', 'example', 'test', 'sales'];
 
 const FILE_EXTENSION_REGEX = /\.(png|jpg|jpeg|gif|svg|webp|ico|pdf|zip|css|js|woff|ttf)$/i;
-
-const PERSONAL_SIGNALS = /\b(I help|I work with|my clients|work with me|book a call|discovery call|I\'m a|I am a|I\'ve helped|I have helped|my approach|my coaching|my story|about me)\b/i;
 
 async function duckSearch(query) {
   const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
@@ -103,18 +120,16 @@ function htmlToText(html) {
   $('script, style, nav, footer, header, noscript, iframe, [role="navigation"]').remove();
   const main = $('main, article, [role="main"], .content, #content').first();
   const root = main.length ? main : $('body');
-  root.find('h1').each((_, el) => $(el).replaceWith(`\n# ${$(el).text().trim()}\n`));
-  root.find('h2').each((_, el) => $(el).replaceWith(`\n## ${$(el).text().trim()}\n`));
-  root.find('h3, h4').each((_, el) => $(el).replaceWith(`\n### ${$(el).text().trim()}\n`));
   root.find('p, li').each((_, el) => $(el).after('\n'));
   return root.text().replace(/\n{3,}/g, '\n\n').replace(/[ \t]+/g, ' ').trim();
 }
 
-function extractEmails(text) {
+function extractEmails(text, vertical) {
+  const blockedPrefixes = LUXURY_VERTICALS.has(vertical) ? BLOCKED_PREFIXES_LUXURY : BLOCKED_PREFIXES_STRICT;
   const matches = text.match(EMAIL_REGEX) || [];
   return [...new Set(matches.map(e => e.toLowerCase()))].filter(e => {
     if (FILE_EXTENSION_REGEX.test(e)) return false;
-    if (BLOCKED_PREFIXES.some(p => e.startsWith(p + '@'))) return false;
+    if (blockedPrefixes.some(p => e.startsWith(p + '@'))) return false;
     return true;
   });
 }
@@ -143,14 +158,14 @@ export async function findLeads() {
   const found = [];
   const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
 
-  for (const query of shuffled) {
+  for (const { query, vertical } of shuffled) {
     if (found.length >= MAX_NEW_LEADS) break;
-    console.log(`  Searching: "${query}"`);
+    console.log(`  [${vertical}] Searching: "${query}"`);
 
     let urls;
     try {
       urls = await duckSearch(query);
-      await new Promise(r => setTimeout(r, 2000)); // avoid rate limiting
+      await new Promise(r => setTimeout(r, 2000));
     } catch (err) {
       console.error(`  Search failed for "${query}":`, err.message);
       continue;
@@ -168,7 +183,7 @@ export async function findLeads() {
         const html = await fetchHtml(pageUrl);
         if (html) {
           text += '\n' + htmlToText(html);
-          emails.push(...extractEmails(html));
+          emails.push(...extractEmails(html, vertical));
         }
         if (emails.length) break;
       }
@@ -176,24 +191,20 @@ export async function findLeads() {
       emails = [...new Set(emails)].filter(e => !existing.has(e));
       if (!emails.length) continue;
 
-      if (!PERSONAL_SIGNALS.test(text)) {
-        console.log(`  Skipped (no personal signals): ${url}`);
-        continue;
-      }
-
       const email = emails[0];
       const name = extractName(text);
       const company = extractCompany(url);
 
-      const row = new Array(21).fill('');
+      const row = new Array(22).fill('');
       row[COL.NAME] = name;
       row[COL.COMPANY] = company;
       row[COL.WEBSITE] = url;
       row[COL.EMAIL] = email;
-      row[COL.NICHE] = query;
+      row[COL.NICHE] = vertical;
       row[COL.SOURCE] = query;
       row[COL.STATUS] = STATUS.NEW;
       row[COL.DATE_ADDED] = today();
+      row[COL.VERTICAL] = vertical;
 
       found.push(row);
       existing.add(email);

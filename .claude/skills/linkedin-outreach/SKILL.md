@@ -1,6 +1,6 @@
 ---
 name: linkedin-outreach
-description: Run and manage the automated LinkedIn outreach pipeline targeting coaches and consultants in the UK and US
+description: ARCHIVED — LinkedIn outreach pipeline (coaches/consultants) removed June 2026. Project moved to archives/linkedin-outreach/.
 trigger: /linkedin-outreach [optional: step to run, e.g. step1, step2, step3, or all]
 examples:
   - /linkedin-outreach
@@ -9,9 +9,12 @@ examples:
   - /linkedin-outreach status
 ---
 
-# linkedin-outreach
+# linkedin-outreach (ARCHIVED)
 
-Runs the automated LinkedIn outreach pipeline at `projects/linkedin-outreach/`. Finds coaches and consultants on LinkedIn in the UK and US, searches for their personal websites, scrapes for context, generates a personalised 300-char connection note and a follow-up DM via Claude. Adam sends manually from LinkedIn and updates the sheet status.
+> This pipeline has been removed. The project files are at `archives/linkedin-outreach/`. The GitHub Actions schedule has been disabled.
+> The email outreach pipeline has been rebuilt with a new website portfolio campaign — see the `email-outreach` skill.
+
+~~Runs the automated LinkedIn outreach pipeline at `projects/linkedin-outreach/`.~~ Finds coaches and consultants on LinkedIn in the UK and US, searches for their personal websites, scrapes for context, generates a personalised 300-char connection note and a follow-up DM via Claude. Adam sends manually from LinkedIn and updates the sheet status.
 
 ## Pipeline Overview
 

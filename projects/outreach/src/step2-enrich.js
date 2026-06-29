@@ -117,6 +117,14 @@ function extractAboutSnippet(text) {
   return '';
 }
 
+function detectPlatform(html) {
+  if (/wix\.com|wixsite\.com|wixstatic/i.test(html)) return 'Wix';
+  if (/squarespace\.com|sqsp\.net|squarespace-cdn/i.test(html)) return 'Squarespace';
+  if (/shopify\.com|cdn\.shopify|myshopify/i.test(html)) return 'Shopify';
+  if (/wp-content|wp-includes|wordpress/i.test(html)) return 'WordPress';
+  return '';
+}
+
 function buildSummary(services, about) {
   if (about) return about.slice(0, 200);
   if (services) return services.slice(0, 200);
@@ -165,11 +173,12 @@ export async function enrichLeads() {
         }
       }
 
-      const services = extractSection(combinedText, ['services', 'work with me', 'programs', 'offerings', 'what i offer', 'what we offer']);
+      const services = extractSection(combinedText, ['services', 'work with me', 'programs', 'offerings', 'what i offer', 'what we offer', 'what we do', 'our work', 'portfolio', 'collection', 'fleet']);
       const painPoints = extractPainPoints(combinedText);
       const blogPosts = extractBlogPosts(combinedHtml, url);
       const aboutSnippet = extractAboutSnippet(combinedText);
       const summary = buildSummary(services, aboutSnippet);
+      const platform = detectPlatform(combinedHtml);
 
       const fields = {
         [COL.SUMMARY]: summary,
@@ -177,6 +186,7 @@ export async function enrichLeads() {
         [COL.PAIN_POINTS]: painPoints,
         [COL.BLOG]: blogPosts,
         [COL.ABOUT]: aboutSnippet,
+        [COL.NOTES]: platform ? `Platform: ${platform}` : '',
         [COL.STATUS]: STATUS.ENRICHED,
       };
 

@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL, FROM_NAME, BCC_EMAIL, COL, STATUS, SEND_DELAY_MIN_MS, SEND_DELAY_MAX_MS } from './config.js';
 import { getLeadsByStatus, updateRowFields, today } from './sheets.js';
 import { buildEmail1 } from './templates.js';
+import { isSafeName } from './name-utils.js';
 
 function createTransport() {
   return nodemailer.createTransport({
@@ -29,13 +30,15 @@ export async function sendEmails() {
 
   for (const lead of leads) {
     const email = lead.data[COL.EMAIL];
-    const name = lead.data[COL.NAME] || 'there';
+    const rawName = lead.data[COL.NAME] || '';
+    const name = isSafeName(rawName) ? rawName : 'there';
     const opener = lead.data[COL.OPENER] || '';
+    const vertical = lead.data[COL.VERTICAL] || '';
 
-    console.log(`  Sending to: ${email}`);
+    console.log(`  Sending to: ${email} [${vertical}]`);
 
     try {
-      const { subject, text } = buildEmail1(name, opener);
+      const { subject, text } = buildEmail1(name, opener, vertical);
 
       const info = await transport.sendMail({
         from: `${FROM_NAME} <${FROM_EMAIL}>`,
