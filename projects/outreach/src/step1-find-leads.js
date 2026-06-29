@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { load } from 'cheerio';
-import { COL, STATUS, MAX_NEW_LEADS } from './config.js';
+import { COL, STATUS, MAX_NEW_LEADS_PER_VERTICAL } from './config.js';
 import { appendLeads, getExistingEmails, today } from './sheets.js';
 import { extractName } from './name-utils.js';
 
@@ -152,14 +152,12 @@ function tryFallbackUrls(baseUrl) {
   }
 }
 
-export async function findLeads() {
-  console.log('Step 1: Finding new leads...');
-  const existing = await getExistingEmails();
+async function findLeadsForVertical(vertical, queries, existing, cap) {
   const found = [];
-  const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
+  const shuffled = [...queries].sort(() => Math.random() - 0.5);
 
-  for (const { query, vertical } of shuffled) {
-    if (found.length >= MAX_NEW_LEADS) break;
+  for (const query of shuffled) {
+    if (found.length >= cap) break;
     console.log(`  [${vertical}] Searching: "${query}"`);
 
     let urls;
@@ -172,7 +170,7 @@ export async function findLeads() {
     }
 
     for (const url of urls) {
-      if (found.length >= MAX_NEW_LEADS) break;
+      if (found.length >= cap) break;
       if (BLOCKED_DOMAINS.test(url)) continue;
 
       const pagesToTry = [url, ...tryFallbackUrls(url)];
@@ -212,8 +210,30 @@ export async function findLeads() {
     }
   }
 
-  await appendLeads(found);
-  console.log(`Step 1 done. Found ${found.length} new leads.`);
+  return found;
+}
+
+export async function findLeads() {
+  console.log('Step 1: Finding new leads...');
+  const existing = await getExistingEmails();
+
+  // Group queries by vertical so each gets a guaranteed allocation
+  const byVertical = {};
+  for (const { query, vertical } of SEARCH_QUERIES) {
+    if (!byVertical[vertical]) byVertical[vertical] = [];
+    byVertical[vertical].push(query);
+  }
+
+  const allFound = [];
+  for (const [vertical, queries] of Object.entries(byVertical)) {
+    console.log(`\n  --- ${vertical} (target: ${MAX_NEW_LEADS_PER_VERTICAL}) ---`);
+    const found = await findLeadsForVertical(vertical, queries, existing, MAX_NEW_LEADS_PER_VERTICAL);
+    console.log(`  ${vertical}: found ${found.length} leads`);
+    allFound.push(...found);
+  }
+
+  await appendLeads(allFound);
+  console.log(`\nStep 1 done. Found ${allFound.length} new leads total.`);
 }
 
 if (process.argv[1].endsWith('step1-find-leads.js')) {

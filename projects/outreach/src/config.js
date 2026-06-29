@@ -51,7 +51,7 @@ export const FROM_EMAIL = 'adam@adamthor.co.uk';
 export const FROM_NAME = 'Adam';
 export const BCC_EMAIL = 'adamthor.outreach@gmail.com';
 export const SHEET_TAB = 'Leads';
-export const MAX_NEW_LEADS = parseInt(process.env.MAX_NEW_LEADS || '35', 10);
+export const MAX_NEW_LEADS_PER_VERTICAL = parseInt(process.env.MAX_NEW_LEADS_PER_VERTICAL || '25', 10);
 export const SEND_DELAY_MIN_MS = 120_000;  // 2 min
 export const SEND_DELAY_MAX_MS = 240_000;  // 4 min
 
