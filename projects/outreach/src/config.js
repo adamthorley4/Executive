@@ -32,6 +32,7 @@ function require_env(key) {
 }
 
 export const ANTHROPIC_API_KEY = require_env('ANTHROPIC_API_KEY');
+export const FIRECRAWL_API_KEY = require_env('FIRECRAWL_API_KEY');
 
 export const SPREADSHEET_ID = require_env('GOOGLE_SHEETS_SPREADSHEET_ID');
 export const SERVICE_ACCOUNT_EMAIL = require_env('GOOGLE_SERVICE_ACCOUNT_EMAIL');

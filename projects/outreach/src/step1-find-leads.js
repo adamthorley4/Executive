@@ -1,112 +1,119 @@
 import fetch from 'node-fetch';
 import { load } from 'cheerio';
-import { COL, STATUS, MAX_NEW_LEADS_PER_VERTICAL } from './config.js';
+import { COL, STATUS, MAX_NEW_LEADS_PER_VERTICAL, FIRECRAWL_API_KEY } from './config.js';
 import { appendLeads, getExistingEmails, today } from './sheets.js';
 import { extractName } from './name-utils.js';
 
-// Each entry: { query, vertical }
 const SEARCH_QUERIES = [
   // --- MAHARI: Luxury Real Estate ---
-  { query: '"luxury property" agency site:.co.uk',                              vertical: 'MAHARI' },
-  { query: '"luxury homes" "contact us" site:.co.uk',                           vertical: 'MAHARI' },
-  { query: '"prime real estate" London agency site:.co.uk',                     vertical: 'MAHARI' },
-  { query: '"luxury properties" agency Dubai site:.com',                        vertical: 'MAHARI' },
-  { query: '"ultra luxury" real estate agency site:.com',                       vertical: 'MAHARI' },
-  { query: '"luxury residential" developer site:.co.uk',                        vertical: 'MAHARI' },
-  { query: '"off-plan" "luxury" property developer UK site:.co.uk',             vertical: 'MAHARI' },
-  { query: '"high-end property" developer London site:.co.uk',                  vertical: 'MAHARI' },
-  { query: '"luxury interior design" studio London site:.co.uk',                vertical: 'MAHARI' },
-  { query: '"architecture studio" luxury residential site:.co.uk',              vertical: 'MAHARI' },
-  { query: '"boutique property" agency UK "contact" site:.co.uk',               vertical: 'MAHARI' },
-  { query: '"luxury apartments" developer "enquire" site:.co.uk',               vertical: 'MAHARI' },
-  { query: '"prime property" agency London Marbella Monaco site:.com',          vertical: 'MAHARI' },
-  { query: '"luxury villas" agency Marbella Spain site:.com',                   vertical: 'MAHARI' },
+  { query: 'luxury property agency London contact site:co.uk',                    vertical: 'MAHARI' },
+  { query: 'luxury homes estate agent UK enquiries site:co.uk',                   vertical: 'MAHARI' },
+  { query: 'prime real estate developer London boutique site:co.uk',              vertical: 'MAHARI' },
+  { query: 'luxury residential property developer UK email site:co.uk',           vertical: 'MAHARI' },
+  { query: 'architecture studio luxury residential London site:co.uk',            vertical: 'MAHARI' },
+  { query: 'interior design studio luxury homes London site:co.uk',               vertical: 'MAHARI' },
+  { query: 'boutique property agency UK luxury contact site:co.uk',               vertical: 'MAHARI' },
+  { query: 'luxury property developer off-plan apartments UK site:co.uk',         vertical: 'MAHARI' },
+  { query: 'high end property agency London sales site:co.uk',                    vertical: 'MAHARI' },
+  { query: 'luxury villa agency Marbella Spain email site:com',                   vertical: 'MAHARI' },
+  { query: 'luxury property agency Dubai contact email site:com',                 vertical: 'MAHARI' },
+  { query: 'prime London property sales boutique agency site:co.uk',              vertical: 'MAHARI' },
+  { query: 'luxury new homes developer UK contact site:co.uk',                    vertical: 'MAHARI' },
+  { query: 'exclusive property consultant UK site:co.uk',                         vertical: 'MAHARI' },
 
   // --- PELAGOS: Superyacht / Luxury Marine ---
-  { query: '"yacht charter" company fleet site:.co.uk',                         vertical: 'PELAGOS' },
-  { query: '"superyacht charter" Mediterranean "enquire" site:.com',            vertical: 'PELAGOS' },
-  { query: '"luxury yacht charter" company site:.com',                          vertical: 'PELAGOS' },
-  { query: '"yacht broker" sales site:.co.uk',                                  vertical: 'PELAGOS' },
-  { query: '"superyacht broker" site:.com "contact"',                           vertical: 'PELAGOS' },
-  { query: '"superyacht management" company site:.com',                         vertical: 'PELAGOS' },
-  { query: '"yacht charter" fleet "book now" site:.com',                        vertical: 'PELAGOS' },
-  { query: '"motor yacht" charter company site:.co.uk',                         vertical: 'PELAGOS' },
-  { query: '"sailing yacht" charter company Mediterranean site:.com',           vertical: 'PELAGOS' },
-  { query: '"luxury yacht" itinerary charter "enquiry" site:.com',              vertical: 'PELAGOS' },
-  { query: '"marina" prestige berths "contact" Monaco Palma site:.com',         vertical: 'PELAGOS' },
-  { query: '"private yacht charter" concierge site:.com',                       vertical: 'PELAGOS' },
+  { query: 'yacht charter company UK contact email site:co.uk',                   vertical: 'PELAGOS' },
+  { query: 'superyacht broker UK contact email site:co.uk',                       vertical: 'PELAGOS' },
+  { query: 'yacht charter Mediterranean luxury contact site:com',                 vertical: 'PELAGOS' },
+  { query: 'superyacht charter brokerage contact enquiry site:com',               vertical: 'PELAGOS' },
+  { query: 'private yacht charter company contact site:com',                      vertical: 'PELAGOS' },
+  { query: 'sailing yacht charter UK fleet email site:co.uk',                     vertical: 'PELAGOS' },
+  { query: 'motor yacht charter UK contact email site:co.uk',                     vertical: 'PELAGOS' },
+  { query: 'luxury yacht hire UK contact site:co.uk',                             vertical: 'PELAGOS' },
+  { query: 'yacht brokerage company UK email site:co.uk',                         vertical: 'PELAGOS' },
+  { query: 'superyacht management company contact site:com',                      vertical: 'PELAGOS' },
+  { query: 'charter yacht broker Mediterranean email site:com',                   vertical: 'PELAGOS' },
+  { query: 'sailing holiday company UK contact email site:co.uk',                 vertical: 'PELAGOS' },
 
   // --- KOAN: Premium Artisan / Product Brands ---
-  { query: '"artisan" knives handmade brand site:.co.uk',                       vertical: 'KOAN' },
-  { query: '"handmade knives" UK brand "shop" site:.co.uk',                     vertical: 'KOAN' },
-  { query: '"Japanese knives" UK brand site:.co.uk',                            vertical: 'KOAN' },
-  { query: '"premium kitchen knives" brand site:.com',                          vertical: 'KOAN' },
-  { query: '"artisan kitchenware" brand UK site:.co.uk',                        vertical: 'KOAN' },
-  { query: '"luxury olive oil" brand UK site:.co.uk',                           vertical: 'KOAN' },
-  { query: '"artisan" "hand-crafted" food brand UK "shop" site:.co.uk',         vertical: 'KOAN' },
-  { query: '"small batch" spirits brand UK site:.co.uk',                        vertical: 'KOAN' },
-  { query: '"craft spirits" brand "buy" site:.co.uk',                           vertical: 'KOAN' },
-  { query: '"premium ceramics" brand UK site:.co.uk',                           vertical: 'KOAN' },
-  { query: '"artisan leather goods" brand UK site:.co.uk',                      vertical: 'KOAN' },
-  { query: '"Japanese" import brand UK artisan site:.co.uk',                    vertical: 'KOAN' },
-  { query: '"premium" "handmade" "shop" watchmaker brand UK site:.co.uk',       vertical: 'KOAN' },
+  { query: 'handmade knives UK brand shop email site:co.uk',                      vertical: 'KOAN' },
+  { query: 'artisan kitchen knives maker UK site:co.uk',                          vertical: 'KOAN' },
+  { query: 'Japanese knives UK supplier shop contact site:co.uk',                 vertical: 'KOAN' },
+  { query: 'craft spirits small batch distillery UK shop site:co.uk',             vertical: 'KOAN' },
+  { query: 'artisan food brand UK shop contact site:co.uk',                       vertical: 'KOAN' },
+  { query: 'premium ceramics UK maker shop site:co.uk',                           vertical: 'KOAN' },
+  { query: 'handmade leather goods UK brand shop site:co.uk',                     vertical: 'KOAN' },
+  { query: 'artisan chocolate brand UK shop site:co.uk',                          vertical: 'KOAN' },
+  { query: 'small batch gin distillery UK contact site:co.uk',                    vertical: 'KOAN' },
+  { query: 'luxury candles UK handmade brand contact site:co.uk',                 vertical: 'KOAN' },
+  { query: 'premium olive oil UK artisan brand contact site:co.uk',               vertical: 'KOAN' },
+  { query: 'handcrafted goods maker UK shop contact site:co.uk',                  vertical: 'KOAN' },
+  { query: 'bespoke furniture maker UK contact site:co.uk',                       vertical: 'KOAN' },
 
   // --- PATROL_PAWS: Local Service Businesses ---
-  { query: '"dog walker" site:.co.uk "book now"',                               vertical: 'PATROL_PAWS' },
-  { query: '"dog walking service" UK "contact me" site:.co.uk',                 vertical: 'PATROL_PAWS' },
-  { query: '"dog walking" "pet sitting" site:.co.uk',                           vertical: 'PATROL_PAWS' },
-  { query: '"mobile dog groomer" site:.co.uk',                                  vertical: 'PATROL_PAWS' },
-  { query: '"pet grooming" service site:.co.uk "book"',                         vertical: 'PATROL_PAWS' },
-  { query: '"doggy daycare" site:.co.uk',                                       vertical: 'PATROL_PAWS' },
-  { query: '"local personal trainer" site:.co.uk "contact"',                    vertical: 'PATROL_PAWS' },
-  { query: '"mobile beautician" UK site:.co.uk',                                vertical: 'PATROL_PAWS' },
-  { query: '"gardener" sole trader site:.co.uk "contact"',                      vertical: 'PATROL_PAWS' },
-  { query: '"electrician" sole trader site:.co.uk "free quote"',                vertical: 'PATROL_PAWS' },
-  { query: '"plumber" site:.co.uk "call me" OR "book now"',                     vertical: 'PATROL_PAWS' },
-  { query: '"osteopath" site:.co.uk "book online"',                             vertical: 'PATROL_PAWS' },
-  { query: '"physiotherapist" site:.co.uk "book appointment"',                  vertical: 'PATROL_PAWS' },
-  { query: '"massage therapist" site:.co.uk "book"',                            vertical: 'PATROL_PAWS' },
+  { query: 'dog walker UK contact email site:co.uk',                              vertical: 'PATROL_PAWS' },
+  { query: 'mobile dog groomer UK contact email site:co.uk',                      vertical: 'PATROL_PAWS' },
+  { query: 'dog grooming service UK contact site:co.uk',                          vertical: 'PATROL_PAWS' },
+  { query: 'pet sitting service UK contact site:co.uk',                           vertical: 'PATROL_PAWS' },
+  { query: 'personal trainer UK contact site:co.uk',                              vertical: 'PATROL_PAWS' },
+  { query: 'massage therapist UK book contact site:co.uk',                        vertical: 'PATROL_PAWS' },
+  { query: 'mobile beautician UK contact site:co.uk',                             vertical: 'PATROL_PAWS' },
+  { query: 'physiotherapist UK contact book site:co.uk',                          vertical: 'PATROL_PAWS' },
+  { query: 'osteopath UK book appointment site:co.uk',                            vertical: 'PATROL_PAWS' },
+  { query: 'local plumber UK contact quote site:co.uk',                           vertical: 'PATROL_PAWS' },
+  { query: 'local electrician UK contact quote site:co.uk',                       vertical: 'PATROL_PAWS' },
+  { query: 'gardener UK contact site:co.uk',                                      vertical: 'PATROL_PAWS' },
+  { query: 'doggy daycare UK contact site:co.uk',                                 vertical: 'PATROL_PAWS' },
+  { query: 'dog walking service UK contact site:co.uk',                           vertical: 'PATROL_PAWS' },
 ];
 
 const EMAIL_REGEX = /[\w.+\-]+@[\w\-]+\.[a-z]{2,}/gi;
 
-const BLOCKED_DOMAINS = /linkedin|instagram|facebook|twitter|reddit|yelp|tripadvisor|yellowpages|clutch|upwork|trustpilot|google\.com|youtube|bark\.com|thumbtack|directory|rightmove|zoopla|onthemarket|primelocation|booking\.com|airbnb|viator|getaway|tripadvisor/i;
+const BLOCKED_DOMAINS = /linkedin|instagram|facebook|twitter|reddit|yelp|tripadvisor|yellowpages|clutch|upwork|trustpilot|google\.com|youtube|bark\.com|thumbtack|directory|rightmove|zoopla|onthemarket|primelocation|booking\.com|airbnb|viator|getaway|duckduckgo\.com|capterra|firecrawl/i;
 
-// Luxury verticals: allow info@, hello@, contact@ — a real person manages these inboxes
 const LUXURY_VERTICALS = new Set(['MAHARI', 'PELAGOS', 'KOAN']);
 
+// Strict: sole traders — only personal/direct emails
 const BLOCKED_PREFIXES_STRICT = ['enroll', 'info', 'hello', 'contact', 'admin', 'support', 'team', 'noreply', 'no-reply', 'example', 'test', 'enquiries', 'enquiry', 'mail', 'office', 'reception', 'booking', 'bookings', 'sales'];
-const BLOCKED_PREFIXES_LUXURY = ['enroll', 'admin', 'support', 'noreply', 'no-reply', 'example', 'test', 'sales'];
+// Luxury: managed inboxes — info@, hello@, contact@ are real
+const BLOCKED_PREFIXES_LUXURY = ['enroll', 'admin', 'support', 'noreply', 'no-reply', 'example', 'test'];
+
+// Known placeholder/fake emails to reject outright
+const FAKE_EMAIL_PATTERN = /^(email@email\.com|test@test\.(com|co\.uk)|example@example\.com|user@domain\.com|name@domain\.com|jane\.doe@.+|john\.doe@.+|your@email\..+|yourname@.+)$/i;
+
+// Local part patterns that indicate non-real emails (HTML entities, hashes, etc.)
+const INVALID_LOCAL_PART = /^u[0-9a-f]{4}|^[a-f0-9]{32}@/i;
+
+// Domains we should never email — includes Sentry ingest patterns
+const BLOCKED_EMAIL_DOMAINS = /duckduckgo\.com|example\.com|test\.com|placeholder\.com|\.ingest$|sentry[-.]|wixpress|sentry\.io/i;
+
+// Large aggregator/booking platforms we should skip
+const LARGE_BRANDS = /dreamyachtcharter|sunsail\.co|moorings\.co|yachtworld|boats\.com|yachtcharterfleet|charterworld|rightmove|zoopla|idealhomes/i;
 
 const FILE_EXTENSION_REGEX = /\.(png|jpg|jpeg|gif|svg|webp|ico|pdf|zip|css|js|woff|ttf)$/i;
 
-async function duckSearch(query) {
-  const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-  const res = await fetch(url, {
+async function firecrawlSearch(query) {
+  const res = await fetch('https://api.firecrawl.dev/v1/search', {
+    method: 'POST',
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Accept': 'text/html,application/xhtml+xml',
+      'Authorization': `Bearer ${FIRECRAWL_API_KEY}`,
+      'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ query, limit: 10 }),
   });
-  if (!res.ok) throw new Error(`DuckDuckGo search failed: ${res.status}`);
-  const html = await res.text();
-  const $ = load(html);
-  const urls = [];
-  $('.result__a').each((_, el) => {
-    const href = $(el).attr('href') || '';
-    const match = href.match(/[?&]uddg=([^&]+)/);
-    if (match) {
-      try { urls.push(decodeURIComponent(match[1])); } catch { /* skip */ }
-    }
-  });
-  return [...new Set(urls)].slice(0, 8);
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Firecrawl search failed: ${res.status} ${text}`);
+  }
+  const data = await res.json();
+  return (data.data || []).map(r => r.url).filter(Boolean);
 }
 
 async function fetchHtml(url) {
   try {
     const res = await fetch(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' },
-      timeout: 10000,
+      signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) return null;
     return await res.text();
@@ -124,11 +131,14 @@ function htmlToText(html) {
   return root.text().replace(/\n{3,}/g, '\n\n').replace(/[ \t]+/g, ' ').trim();
 }
 
-function extractEmails(text, vertical) {
+function extractEmails(html, vertical) {
   const blockedPrefixes = LUXURY_VERTICALS.has(vertical) ? BLOCKED_PREFIXES_LUXURY : BLOCKED_PREFIXES_STRICT;
-  const matches = text.match(EMAIL_REGEX) || [];
+  const matches = html.match(EMAIL_REGEX) || [];
   return [...new Set(matches.map(e => e.toLowerCase()))].filter(e => {
     if (FILE_EXTENSION_REGEX.test(e)) return false;
+    if (FAKE_EMAIL_PATTERN.test(e)) return false;
+    if (INVALID_LOCAL_PART.test(e)) return false;
+    if (BLOCKED_EMAIL_DOMAINS.test(e.split('@')[1])) return false;
     if (blockedPrefixes.some(p => e.startsWith(p + '@'))) return false;
     return true;
   });
@@ -143,10 +153,17 @@ function extractCompany(url) {
   }
 }
 
-function tryFallbackUrls(baseUrl) {
+function fallbackContactUrls(baseUrl) {
   try {
-    const u = new URL(baseUrl);
-    return [`${u.origin}/contact`, `${u.origin}/about`];
+    const origin = new URL(baseUrl).origin;
+    return [
+      `${origin}/contact`,
+      `${origin}/contact-us`,
+      `${origin}/get-in-touch`,
+      `${origin}/enquire`,
+      `${origin}/enquiry`,
+      `${origin}/about`,
+    ];
   } catch {
     return [];
   }
@@ -162,8 +179,8 @@ async function findLeadsForVertical(vertical, queries, existing, cap) {
 
     let urls;
     try {
-      urls = await duckSearch(query);
-      await new Promise(r => setTimeout(r, 2000));
+      urls = await firecrawlSearch(query);
+      await new Promise(r => setTimeout(r, 1000));
     } catch (err) {
       console.error(`  Search failed for "${query}":`, err.message);
       continue;
@@ -172,8 +189,11 @@ async function findLeadsForVertical(vertical, queries, existing, cap) {
     for (const url of urls) {
       if (found.length >= cap) break;
       if (BLOCKED_DOMAINS.test(url)) continue;
+      if (LARGE_BRANDS.test(url)) continue;
+      // Skip blog/article/news pages — we want the homepage of a business, not a listicle
+      if (/\/(blog|article|articles|news|post|posts|guide|guides|tips|advice|inspiration)\//i.test(url)) continue;
 
-      const pagesToTry = [url, ...tryFallbackUrls(url)];
+      const pagesToTry = [url, ...fallbackContactUrls(url)];
       let emails = [];
       let text = '';
 
@@ -217,7 +237,6 @@ export async function findLeads() {
   console.log('Step 1: Finding new leads...');
   const existing = await getExistingEmails();
 
-  // Group queries by vertical so each gets a guaranteed allocation
   const byVertical = {};
   for (const { query, vertical } of SEARCH_QUERIES) {
     if (!byVertical[vertical]) byVertical[vertical] = [];

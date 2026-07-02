@@ -128,7 +128,7 @@ cd projects/outreach && MAX_NEW_LEADS=3 npm run step1
 
 Runs daily via `.github/workflows/outreach.yml`. Manual trigger available via GitHub Actions UI.
 
-Required secrets: `ANTHROPIC_API_KEY`, `GOOGLE_SHEETS_SPREADSHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASS`
+Required secrets: `ANTHROPIC_API_KEY`, `FIRECRAWL_API_KEY`, `GOOGLE_SHEETS_SPREADSHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASS`
 
 ## Common Issues
 
@@ -141,3 +141,5 @@ Required secrets: `ANTHROPIC_API_KEY`, `GOOGLE_SHEETS_SPREADSHEET_ID`, `GOOGLE_S
 **Wrong vertical on old leads** — if a lead in the sheet has no VERTICAL value, template falls back to PATROL_PAWS. Add the VERTICAL manually in column V to fix.
 
 **Google Sheet tab not found** — tab must be named exactly `Leads`. Old tab is `AI Leads — Old`.
+
+**Step 1 finds 0 leads** — lead search now uses Firecrawl API (replaced DuckDuckGo scraping which rate-limits after 2-3 requests). If step 1 returns 0, check `FIRECRAWL_API_KEY` is set in `.env` and in GitHub Actions secrets.
