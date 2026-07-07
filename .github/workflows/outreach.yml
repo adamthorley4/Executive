@@ -26,6 +26,7 @@ jobs:
 
       - name: Run outreach pipeline
         env:
+          NODE_OPTIONS: '--dns-result-order=ipv4first'
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
           OUTREACH_SPREADSHEET_ID: ${{ secrets.OUTREACH_SPREADSHEET_ID }}
