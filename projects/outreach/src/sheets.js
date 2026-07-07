@@ -52,7 +52,12 @@ export async function getExistingEmails() {
   return new Set(vals.flat().map(e => e.toLowerCase().trim()).filter(Boolean));
 }
 
-// Appends new lead rows to the sheet
+// Appends new lead rows to the sheet.
+// Uses values.update() to an explicit computed range rather than values.append() —
+// append() with insertDataOption=INSERT_ROWS on an open-ended range silently
+// misaligns columns once a batch gets into the hundreds of rows (verified via
+// direct testing: 5-row batches land fine, ~100-row batches shift right until
+// only the first couple of fields survive, landing in the wrong columns).
 export async function appendLeads(leads) {
   if (!leads.length) return;
   const existing = await getExistingEmails();
@@ -61,11 +66,16 @@ export async function appendLeads(leads) {
     console.log('  No new leads to append (all already in sheet)');
     return;
   }
-  await sheets().spreadsheets.values.append({
+  const colA = await sheets().spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: `${SHEET_TAB}!A:V`,
+    range: `${SHEET_TAB}!A:A`,
+  });
+  const startRow = (colA.data.values?.length || 1) + 1;
+  const endRow = startRow + toAdd.length - 1;
+  await sheets().spreadsheets.values.update({
+    spreadsheetId: SPREADSHEET_ID,
+    range: `${SHEET_TAB}!A${startRow}:V${endRow}`,
     valueInputOption: 'RAW',
-    insertDataOption: 'INSERT_ROWS',
     requestBody: { values: toAdd },
   });
   console.log(`  Appended ${toAdd.length} new leads`);
