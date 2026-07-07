@@ -66,13 +66,34 @@ export async function appendLeads(leads) {
     console.log('  No new leads to append (all already in sheet)');
     return;
   }
-  const colA = await sheets().spreadsheets.values.get({
+  const client = sheets();
+  const colA = await client.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
     range: `${SHEET_TAB}!A:A`,
   });
   const startRow = (colA.data.values?.length || 1) + 1;
   const endRow = startRow + toAdd.length - 1;
-  await sheets().spreadsheets.values.update({
+
+  // values.update() won't auto-grow the grid the way append() does — expand it first if needed
+  const meta = await client.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
+  const tab = meta.data.sheets.find(s => s.properties.title === SHEET_TAB);
+  const currentRowCount = tab.properties.gridProperties.rowCount;
+  if (endRow > currentRowCount) {
+    await client.spreadsheets.batchUpdate({
+      spreadsheetId: SPREADSHEET_ID,
+      requestBody: {
+        requests: [{
+          appendDimension: {
+            sheetId: tab.properties.sheetId,
+            dimension: 'ROWS',
+            length: endRow - currentRowCount + 100,
+          },
+        }],
+      },
+    });
+  }
+
+  await client.spreadsheets.values.update({
     spreadsheetId: SPREADSHEET_ID,
     range: `${SHEET_TAB}!A${startRow}:V${endRow}`,
     valueInputOption: 'RAW',
