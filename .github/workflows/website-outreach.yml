@@ -1,9 +1,10 @@
 name: Website Outreach Pipeline
 
 on:
-  schedule:
-    - cron: '0 8 * * *'  # 8am UTC = 9am UK BST (UTC+1) — adjust to '0 9 * * *' in winter (GMT)
-  workflow_dispatch:        # manual trigger for testing
+  # Schedule disabled 2026-07-07 — pipeline was failing daily (Firecrawl key missing,
+  # then Anthropic connection errors blocking all sends). Re-add the cron block below
+  # to resume: - cron: '0 8 * * *'  # 8am UTC = 9am UK BST (UTC+1)
+  workflow_dispatch:        # manual trigger only
 
 jobs:
   outreach:
