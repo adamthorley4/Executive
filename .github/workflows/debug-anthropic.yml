@@ -1,0 +1,43 @@
+name: Debug Anthropic Connectivity
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+      - name: Install SDK
+        run: npm install @anthropic-ai/sdk@latest
+      - name: Test connection
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node -e "
+          import('@anthropic-ai/sdk').then(async ({ default: Anthropic }) => {
+            console.log('Node version:', process.version);
+            const dns = await import('dns');
+            const addrs = await dns.promises.lookup('api.anthropic.com', { all: true });
+            console.log('DNS:', JSON.stringify(addrs));
+            const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+            try {
+              const start = Date.now();
+              const msg = await client.messages.create({
+                model: 'claude-sonnet-4-6',
+                max_tokens: 20,
+                messages: [{ role: 'user', content: 'Say OK' }],
+              });
+              console.log('SUCCESS in', Date.now()-start, 'ms:', msg.content[0]?.text);
+            } catch (err) {
+              console.log('FAILED:', err.constructor.name);
+              console.log('Message:', err.message);
+              console.log('Status:', err.status);
+              console.log('Cause:', err.cause);
+              console.log('Full error:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
+            }
+          });
+          "
