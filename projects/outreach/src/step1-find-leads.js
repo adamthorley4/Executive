@@ -200,7 +200,11 @@ async function findLeadsForVertical(vertical, queries, existing, cap) {
       for (const pageUrl of pagesToTry) {
         const html = await fetchHtml(pageUrl);
         if (html) {
-          text += '\n' + htmlToText(html);
+          try {
+            text += '\n' + htmlToText(html);
+          } catch (err) {
+            console.error(`    Skipping unparseable page ${pageUrl}: ${err.message}`);
+          }
           emails.push(...extractEmails(html, vertical));
         }
         if (emails.length) break;
