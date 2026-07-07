@@ -65,6 +65,7 @@ export async function appendLeads(leads) {
     spreadsheetId: SPREADSHEET_ID,
     range: `${SHEET_TAB}!A:V`,
     valueInputOption: 'RAW',
+    insertDataOption: 'INSERT_ROWS',
     requestBody: { values: toAdd },
   });
   console.log(`  Appended ${toAdd.length} new leads`);
