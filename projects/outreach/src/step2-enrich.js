@@ -187,7 +187,7 @@ export async function enrichLeads() {
         [COL.BLOG]: blogPosts,
         [COL.ABOUT]: aboutSnippet,
         [COL.NOTES]: platform ? `Platform: ${platform}` : '',
-        [COL.STATUS]: STATUS.ENRICHED,
+        [COL.STATUS]: STATUS.DRAFT_READY,
       };
 
       if (!lead.data[COL.NAME]) {

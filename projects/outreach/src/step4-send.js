@@ -31,14 +31,13 @@ export async function sendEmails() {
   for (const lead of leads) {
     const email = lead.data[COL.EMAIL];
     const rawName = lead.data[COL.NAME] || '';
-    const name = isSafeName(rawName) ? rawName : 'there';
-    const opener = lead.data[COL.OPENER] || '';
+    const name = isSafeName(rawName) ? rawName : '';
     const vertical = lead.data[COL.VERTICAL] || '';
 
     console.log(`  Sending to: ${email} [${vertical}]`);
 
     try {
-      const { subject, text } = buildEmail1(name, opener, vertical);
+      const { subject, text } = buildEmail1(name, vertical);
 
       const info = await transport.sendMail({
         from: `${FROM_NAME} <${FROM_EMAIL}>`,

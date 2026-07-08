@@ -62,7 +62,7 @@ async function getReplyAddresses() {
 async function sendFollowUp(lead, emailNum, transport) {
   const email = lead.data[COL.EMAIL];
   const rawName = lead.data[COL.NAME] || '';
-  const name = isSafeName(rawName) ? rawName : 'there';
+  const name = isSafeName(rawName) ? rawName : '';
   const msgId = lead.data[COL.E1_MSG_ID] || '';
   const vertical = lead.data[COL.VERTICAL] || '';
 

@@ -31,7 +31,6 @@ function require_env(key) {
   return val;
 }
 
-export const ANTHROPIC_API_KEY = require_env('ANTHROPIC_API_KEY');
 export const FIRECRAWL_API_KEY = require_env('FIRECRAWL_API_KEY');
 
 export const SPREADSHEET_ID = require_env('OUTREACH_SPREADSHEET_ID');
@@ -84,7 +83,6 @@ export const COL = {
 
 export const STATUS = {
   NEW: 'New',
-  ENRICHED: 'Enriched',
   DRAFT_READY: 'Draft Ready',
   SENT_E1: 'Sent E1',
   SENT_E2: 'Sent E2',
